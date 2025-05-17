@@ -1,5 +1,5 @@
 <?php
-define('LOCAL_PATH', getenv('LOCAL_PATH') ?: 'https://seusite.render.com/');
+define('LOCAL_PATH', getenv('LOCAL_PATH') ?: 'https://https://zoomx.onrender.com/');
 
 $databaseUrl = getenv('DATABASE_URL') ?: 'postgresql://smithgg415:Jtn5fpob64g18cD9hlsZ6cXHPtoK6jTd@dpg-d0kgkoruibrs739hd8f0-a.oregon-postgres.render.com:5432/zoomx_tcc';
 
