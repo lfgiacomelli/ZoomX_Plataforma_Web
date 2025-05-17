@@ -9,7 +9,7 @@ if (!isset($_SESSION["usuario"])) {
     $_SESSION["nome"] = 'Visitante';
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . 'bd/conexao.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bd/conexao.php';
 $conexao = conexao::getInstance();
 
 $sql = ' SELECT a.*, u.usu_nome FROM avaliacoes a JOIN usuarios u ON a.usu_codigo = u.usu_codigo ORDER BY a.ava_codigo DESC LIMIT 3';
