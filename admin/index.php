@@ -35,7 +35,7 @@ $sqlViagensAndamento = "SELECT v.via_codigo, v.via_data, v.via_origem, v.via_des
 $viagensAndamento = $conexao->query($sqlViagensAndamento)->fetchAll(PDO::FETCH_ASSOC);
 
 $totalUsuarios = $conexao->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
-$totalMototaxistas = $conexao->query("SELECT COUNT(*) FROM funcionarios WHERE fun_ativo = 1 and fun_cargo = 'mototaxista'")->fetchColumn();
+$totalMototaxistas = $conexao->query("SELECT COUNT(*) FROM funcionarios WHERE fun_ativo = true and fun_cargo = 'mototaxista'")->fetchColumn();
 $faturamentoHoje = $conexao->query("SELECT SUM(via_valor) FROM viagens WHERE DATE(via_data) = CURDATE()")->fetchColumn() ?? 0;
 $viagensAndamentoCount = count($viagensAndamento);
 

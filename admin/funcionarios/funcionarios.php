@@ -307,7 +307,7 @@ $funcionarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <form method="post" action="../../actions/actionfuncionario.php" class="action-form">
                                             <input type="hidden" name="acao" value="ativar_desativar">
                                             <input type="hidden" name="fun_codigo" value="<?= $funcionario['fun_codigo'] ?>">
-                                            <input type="hidden" name="ativo" value="<?= $funcionario['fun_ativo'] ? 0 : 1 ?>">
+                                            <input type="hidden" name="ativo" value="<?= $funcionario['fun_ativo'] ? false : true ?>">
 
                                             <button type="submit" class="btn-toggle">
                                                 <i class="bi <?= $funcionario['fun_ativo'] ? 'bi-person-x' : 'bi-person-check' ?>"></i>

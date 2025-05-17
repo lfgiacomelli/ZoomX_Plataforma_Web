@@ -189,7 +189,7 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <input type="hidden" name="acao" value="adicionar" />
-            <input type="hidden" name="ativo" value="1" />
+            <input type="hidden" name="ativo" value="true" />
             <input type="hidden" name="data_contratacao" value="<?= date('Y-m-d'); ?>" />
 
             <button type="submit">Registrar Funcionário</button>

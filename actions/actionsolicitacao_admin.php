@@ -25,7 +25,7 @@ if ($acao === 'finalizar' && $via_codigo > 0) {
         if ($resultado && isset($resultado['fun_codigo'])) {
             $funcionario_codigo = $resultado['fun_codigo'];
 
-            $sqlAtivar = 'UPDATE funcionarios SET fun_ativo = 1 WHERE fun_codigo = :funcionario_codigo';
+            $sqlAtivar = 'UPDATE funcionarios SET fun_ativo = true WHERE fun_codigo = :funcionario_codigo';
             $stmt = $conexao->prepare($sqlAtivar);
             $stmt->bindParam(':funcionario_codigo', $funcionario_codigo, PDO::PARAM_INT);
             $stmt->execute();
@@ -80,7 +80,7 @@ if ($acao === 'aceitar') {
         $solicitacao = $stmt_solicitacao->fetch(PDO::FETCH_ASSOC);
 
         if ($solicitacao) {
-            $sql = 'UPDATE funcionarios set fun_ativo = 0 WHERE fun_codigo = :funcionario_codigo';
+            $sql = 'UPDATE funcionarios set fun_ativo = true WHERE fun_codigo = :funcionario_codigo';
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(':funcionario_codigo', $funcionario_codigo);
             $stmt->execute();

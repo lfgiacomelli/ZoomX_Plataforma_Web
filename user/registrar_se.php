@@ -54,7 +54,7 @@ unset($_SESSION['erro_email']); // Limpar a mensagem após exibir
             </div>
 
             <input type="hidden" name="acao" value="adicionar">
-            <input type="hidden" name="ativo" value="1">
+            <input type="hidden" name="ativo" value="true">
             <input type="hidden" name="created_at" value="<?php echo date('Y-m-d H:i:s'); ?>">
             <input type="hidden" name="updated_at" value="<?php echo date('Y-m-d H:i:s'); ?>">
 

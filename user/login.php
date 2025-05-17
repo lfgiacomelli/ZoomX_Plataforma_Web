@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stm->execute() && $stm->rowCount() === 1) {
             $usuario = $stm->fetch(PDO::FETCH_ASSOC);
 
-            if ($usuario['usu_ativo'] == 0) {
+            if ($usuario['usu_ativo'] == false) {
                 $_SESSION["erro_login"] = "Conta banida";
                 $_SESSION["banido"] = true;
                 header("Location: login.php");

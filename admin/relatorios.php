@@ -18,8 +18,8 @@ if ($dataInicio > $dataFim) {
 }
 
 $sqlUsuarios = "SELECT COUNT(*) as total, 
-                SUM(CASE WHEN usu_ativo = 1 THEN 1 ELSE 0 END) as ativos,
-                SUM(CASE WHEN usu_ativo = 0 THEN 1 ELSE 0 END) as banidos,
+                SUM(CASE WHEN usu_ativo = true THEN true ELSE false END) as ativos,
+                SUM(CASE WHEN usu_ativo = false THEN true ELSE false END) as banidos,
                 SUM(CASE WHEN DATE(usu_created_at) BETWEEN :dataInicio AND :dataFim THEN 1 ELSE 0 END) as novos
                 FROM usuarios";
 $stmtUsuarios = $conexao->prepare($sqlUsuarios);

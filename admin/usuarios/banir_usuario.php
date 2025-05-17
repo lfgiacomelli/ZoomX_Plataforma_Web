@@ -25,7 +25,7 @@ if (!$usuario) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $sql = 'UPDATE usuarios SET usu_ativo = 0 WHERE usu_codigo = ?';
+    $sql = 'UPDATE usuarios SET usu_ativo = false WHERE usu_codigo = ?';
     $stmt = $conexao->prepare($sql);
     
     if ($stmt->execute([$id])) {

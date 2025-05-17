@@ -15,7 +15,7 @@ $senha = isset($_POST['senha']) ? $_POST['senha'] : null;
 $telefone = isset($_POST['telefone']) ? $_POST['telefone'] : null;
 $cnh = isset($_POST['cnh']) ? $_POST['cnh'] : null;
 $data_contratacao = isset($_POST['data_contratacao']) ? $_POST['data_contratacao'] : null;
-$ativo = isset($_POST['ativo']) ? $_POST['ativo'] : 0;
+$ativo = isset($_POST['ativo']) ? $_POST['ativo'] : false;
 $cargo = isset($_POST['cargo']) ? $_POST['cargo'] : null;
 
 

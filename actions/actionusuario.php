@@ -13,7 +13,7 @@ $nome = isset($_POST['nome']) ? $_POST['nome'] : null;
 $email = isset($_POST['email']) ? $_POST['email'] : null;
 $senha = isset($_POST['senha']) ? $_POST['senha'] : null;
 $telefone = isset($_POST['telefone']) ? $_POST['telefone'] : null;
-$ativo = isset($_POST['ativo']) ? $_POST['ativo'] : 0;
+$ativo = isset($_POST['ativo']) ? $_POST['ativo'] : false;
 $updated_at = date('Y-m-d H:i:s');
 $created_at = date('Y-m-d H:i:s');
 
@@ -49,7 +49,7 @@ if ($acao == 'adicionar') {
 
         $_SESSION["logado099"] = true;
         $_SESSION['tipo'] = 'usuario';
-        $_SESSION['ativo'] = 1;
+        $_SESSION['ativo'] = true;
         $_SESSION["id"] = $usu_codigo;
         $_SESSION["nome"] = $nome;
 
@@ -189,7 +189,7 @@ if ($acao == 'banir') {
     }
 }
 if ($acao == 'desbanir') {
-    $sql = "UPDATE usuarios SET usu_ativo = 1 WHERE usu_codigo = :id";
+    $sql = "UPDATE usuarios SET usu_ativo = true WHERE usu_codigo = :id";
     $stmt = $conexao->prepare($sql);
     $stmt->bindParam(':id', $id);
     $retorno = $stmt->execute();

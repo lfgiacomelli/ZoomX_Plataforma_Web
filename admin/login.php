@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (password_verify($senha, $funcionario["fun_senha"])) {
                 $_SESSION["logado099"] = true;
                 $_SESSION['tipo'] = 'atendente';
-                $_SESSION["ativo"] = 1;
+                $_SESSION["ativo"] = true;
                 $_SESSION["fun_codigo"] = $funcionario["fun_codigo"];
                 $_SESSION["nome"] = $funcionario["fun_nome"];
 
