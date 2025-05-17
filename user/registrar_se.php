@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Verificar se há uma mensagem de erro na sessão (vinda do actionusuario.php)
 $erro_email = isset($_SESSION['erro_email']) ? $_SESSION['erro_email'] : '';
 unset($_SESSION['erro_email']); // Limpar a mensagem após exibir
 ?>

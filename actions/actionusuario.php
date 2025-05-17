@@ -1,9 +1,4 @@
 <?php
-session_start();
-if (!isset($_SESSION["logado099"]) || $_SESSION["tipo"] !== 'atendente') {
-    header("Location: ../index.php");
-    exit;
-}
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
@@ -63,7 +58,7 @@ if ($acao == 'adicionar') {
     }
 }
 
-if ($acao == 'editar') {
+if ($acao == 'editar' && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario' || $_SESSION['tipo'] == 'atendente') {
     if (!empty($senha)) {
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);  // Cria o hash da senha
         $sql = "UPDATE usuarios SET usu_nome = :nome, usu_email = :email, usu_senha = :senha, usu_telefone = :telefone, usu_ativo = :ativo, usu_updated_at = :updated_at WHERE usu_codigo = :id";
@@ -93,7 +88,7 @@ if ($acao == 'editar') {
     }
 }
 
-if ($acao == 'admin_editar') {
+if ($acao == 'admin_editar'  && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario' || $_SESSION['tipo'] == 'atendente') {
     if (!empty($senha)) {
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);
         $sql = "UPDATE usuarios SET usu_nome = :nome, usu_email = :email, usu_senha = :senha, usu_telefone = :telefone, usu_ativo = :ativo WHERE usu_codigo = :id";
@@ -123,7 +118,7 @@ if ($acao == 'admin_editar') {
 }
 
 
-if ($acao == 'excluir') {
+if ($acao == 'excluir'  && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario' || $_SESSION['tipo'] == 'atendente') {
     $sql = 'DELETE FROM avaliacoes WHERE via_codigo IN (
                 SELECT via_codigo FROM viagens WHERE usu_codigo = :id
             )';
@@ -173,8 +168,8 @@ if ($acao == 'excluir') {
     }
 }
 
-if ($acao == 'banir') {
-    $sql = "UPDATE usuarios SET usu_ativo = 0 WHERE usu_codigo = :id";
+if ($acao == 'banir'  && $_SESSION['logado099'] &&  $_SESSION['tipo'] == 'atendente') {
+    $sql = "UPDATE usuarios SET usu_ativo = false WHERE usu_codigo = :id";
     $stmt = $conexao->prepare($sql);
     $stmt->bindParam(':id', $id);
     $retorno = $stmt->execute();
