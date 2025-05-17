@@ -20,7 +20,7 @@ if ($dataInicio > $dataFim) {
 $sqlUsuarios = "SELECT COUNT(*) as total, 
                 SUM(CASE WHEN usu_ativo = true THEN true ELSE false END) as ativos,
                 SUM(CASE WHEN usu_ativo = false THEN true ELSE false END) as banidos,
-                SUM(CASE WHEN DATE(usu_created_at) BETWEEN :dataInicio AND :dataFim THEN 1 ELSE 0 END) as novos
+                SUM(CASE WHEN DATE(usu_created_at) BETWEEN :dataInicio AND :dataFim THEN true ELSE false END) as novos
                 FROM usuarios";
 $stmtUsuarios = $conexao->prepare($sqlUsuarios);
 $stmtUsuarios->bindParam(':dataInicio', $dataInicio);
@@ -30,8 +30,8 @@ $dadosUsuarios = $stmtUsuarios->fetch(PDO::FETCH_ASSOC);
 
 $sqlCorridas = "SELECT 
     COUNT(*) as total,
-    SUM(CASE WHEN via_status = 'finalizada' THEN 1 ELSE 0 END) as finalizadas,
-    SUM(CASE WHEN via_status = 'em andamento' THEN 1 ELSE 0 END) as em_andamento,
+    SUM(CASE WHEN via_status = 'finalizada' THEN true ELSE false END) as finalizadas,
+    SUM(CASE WHEN via_status = 'em andamento' THEN true ELSE false END) as em_andamento,
     AVG(via_valor) as valor_medio,
     SUM(via_valor) as faturamento_total
 FROM viagens

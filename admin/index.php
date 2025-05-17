@@ -36,7 +36,7 @@ $viagensAndamento = $conexao->query($sqlViagensAndamento)->fetchAll(PDO::FETCH_A
 
 $totalUsuarios = $conexao->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
 $totalMototaxistas = $conexao->query("SELECT COUNT(*) FROM funcionarios WHERE fun_ativo = true and fun_cargo = 'mototaxista'")->fetchColumn();
-$faturamentoHoje = $conexao->query("SELECT SUM(via_valor) FROM viagens WHERE DATE(via_data) = CURDATE()")->fetchColumn() ?? 0;
+$faturamentoHoje = $conexao->query("SELECT SUM(via_valor) FROM viagens WHERE via_data::date = CURRENT_DATE")->fetchColumn() ?? 0;
 $viagensAndamentoCount = count($viagensAndamento);
 
 $sql = "SELECT * FROM motocicletas ORDER BY mot_codigo DESC LIMIT 5";
