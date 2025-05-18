@@ -17,11 +17,13 @@ if ($dataInicio > $dataFim) {
     $dataFim = $temp;
 }
 
-$sqlUsuarios = "SELECT COUNT(*) as total, 
-                SUM(CASE WHEN usu_ativo = true THEN true ELSE false END) as ativos,
-                SUM(CASE WHEN usu_ativo = false THEN true ELSE false END) as banidos,
-                SUM(CASE WHEN DATE(usu_created_at) BETWEEN :dataInicio AND :dataFim THEN true ELSE false END) as novos
-                FROM usuarios";
+$sqlUsuarios = "SELECT 
+    COUNT(*) as total, 
+    SUM(CASE WHEN usu_ativo = true THEN 1 ELSE 0 END) as ativos,
+    SUM(CASE WHEN usu_ativo = false THEN 1 ELSE 0 END) as banidos,
+    SUM(CASE WHEN DATE(usu_created_at) BETWEEN :dataInicio AND :dataFim THEN 1 ELSE 0 END) as novos
+FROM usuarios";
+
 $stmtUsuarios = $conexao->prepare($sqlUsuarios);
 $stmtUsuarios->bindParam(':dataInicio', $dataInicio);
 $stmtUsuarios->bindParam(':dataFim', $dataFim);
