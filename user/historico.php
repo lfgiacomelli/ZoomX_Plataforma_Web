@@ -1,15 +1,5 @@
 <?php
-session_start();
-
-if (
-    !isset($_SESSION['logado099']) ||
-    !isset($_SESSION['ativo']) || $_SESSION['ativo'] !== true ||
-    !isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'usuario'
-) {
-    header('Location: ../user/login.php');
-    exit;
-}
-
+include '../components/verifica_sessao.php';
 
 $usuario_id = filter_var($_SESSION['id'], FILTER_VALIDATE_INT);
 

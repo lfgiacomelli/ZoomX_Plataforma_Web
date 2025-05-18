@@ -1,14 +1,5 @@
 <?php
-session_start();
-
-if (
-    !isset($_SESSION['logado099']) ||
-    !isset($_SESSION['tipo']) ||
-    $_SESSION['tipo'] !== 'usuario'
-) {
-    header('Location: ../user/login.php');
-    exit;
-}
+include '../components/verifica_sessao.php';
 
 
 if (!isset($_SESSION['hora_abertura_' . $_GET['id']])) {

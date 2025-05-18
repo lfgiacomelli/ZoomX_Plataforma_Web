@@ -1,9 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION["logado099"]) && $_SESSION["tipo"] !== 'atendente') {
-    header("Location: ../index.php");
-    exit;
-}
+include '../components/verifica_sessao_admin.php';
+
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 

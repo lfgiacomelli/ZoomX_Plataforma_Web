@@ -1,12 +1,9 @@
 <?php
 require '../../bd/conexao.php';
 $conexao = conexao::getInstance();
-session_start();
+include '../../components/verifica_sessao_admin.php';
 
-if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
-    header("Location: ../index.php");
-    exit;
-}
+
 $sql = "SELECT a.*, u.usu_nome FROM avaliacoes a
         JOIN usuarios u ON a.usu_codigo = u.usu_codigo
         ORDER BY a.ava_codigo DESC";

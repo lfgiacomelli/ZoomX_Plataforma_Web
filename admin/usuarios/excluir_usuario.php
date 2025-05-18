@@ -3,12 +3,9 @@
 require '../../bd/conexao.php';
 $conexao = conexao::getInstance();
 
-session_start();
+include '../../components/verifica_sessao_admin.php';
 
-if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
-    header("Location: ../index.php");
-    exit;
-}
+
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 if (!$id) {
     header('Location: usuarios.php');
