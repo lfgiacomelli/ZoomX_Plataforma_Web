@@ -14,29 +14,23 @@ $status = $_POST['status'] ?? ($acao === 'aceitar' ? 'aceita' : 'recusada');
 $funcionario_codigo = $_POST['funcionario_codigo'] ?? null;
 $ate_codigo = $_SESSION['fun_codigo'] ?? null;  
 
-    if ($acao === 'finalizar' && $via_codigo > 0) {
-        try {
-            $conexao->beginTransaction();
 
-            $sqlBuscarDados = "
-                SELECT v.fun_codigo, v.usu_codigo, u.usu_email, u.usu_nome
-                FROM viagens v
-                INNER JOIN usuarios u ON v.usu_codigo = u.usu_codigo
-                WHERE v.via_codigo = :via_codigo
-                LIMIT 1";
-            
-            $stmt = $conexao->prepare($sqlBuscarDados);
-            $stmt->bindParam(':via_codigo', $via_codigo, PDO::PARAM_INT);
-            $stmt->execute();
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($acao === 'finalizar' && $via_codigo > 0) {
+    try {
+        $sqlBuscarDados = "
+            SELECT v.fun_codigo, v.usu_codigo, u.usu_email
+            FROM viagens v
+            INNER JOIN usuarios u ON v.usu_codigo = u.usu_codigo
+            WHERE v.via_codigo = :via_codigo
+            LIMIT 1";
+        $stmt = $conexao->prepare($sqlBuscarDados);
+        $stmt->bindParam(':via_codigo', $via_codigo, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$resultado || !isset($resultado['fun_codigo'], $resultado['usu_email'])) {
-                throw new Exception('Funcionário ou usuário não encontrado para esta viagem.');
-            }
-
+        if ($resultado && isset($resultado['fun_codigo'], $resultado['usu_email'])) {
             $funcionario_codigo = $resultado['fun_codigo'];
             $emailUsuario = $resultado['usu_email'];
-            $nomeUsuario = $resultado['usu_nome'] ?? 'Cliente';
 
             $sqlAtivar = "UPDATE funcionarios SET fun_ativo = true WHERE fun_codigo = :funcionario_codigo";
             $stmt = $conexao->prepare($sqlAtivar);
@@ -49,103 +43,39 @@ $ate_codigo = $_SESSION['fun_codigo'] ?? null;
             $stmt->execute();
 
             $avaliarUrl = "https://zoomx.onrender.com/user/avaliar_viagem.php?via_codigo=" . urlencode($via_codigo);
-            
+
             $assunto = "Viagem Finalizada - ZoomX";
-            
             $mensagem = "
-                <!DOCTYPE html>
-                <html lang='pt-BR'>
+                <html>
                 <head>
-                    <meta charset='UTF-8'>
-                    <title>Viagem Finalizada</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                        .header { background-color: #0066cc; color: white; padding: 10px; text-align: center; }
-                        .content { padding: 20px; background-color: #f9f9f9; }
-                        .button { 
-                            display: inline-block; padding: 10px 20px; 
-                            background-color: #0066cc; color: white; 
-                            text-decoration: none; border-radius: 5px; 
-                        }
-                        .footer { margin-top: 20px; font-size: 12px; color: #777; }
-                    </style>
+                  <title>Viagem Finalizada</title>
                 </head>
                 <body>
-                    <div class='container'>
-                        <div class='header'>
-                            <h1>ZoomX</h1>
-                        </div>
-                        <div class='content'>
-                            <p>Olá, {$nomeUsuario}</p>
-                            <p>Sua viagem com código <strong>{$via_codigo}</strong> foi finalizada com sucesso.</p>
-                            <p>Agradecemos por utilizar nossos serviços e gostaríamos de saber sua opinião.</p>
-                            <p>
-                                <a href='{$avaliarUrl}' class='button'>Avaliar Viagem</a>
-                            </p>
-                            <p>Se o botão não funcionar, copie e cole este link em seu navegador:<br>
-                            <small>{$avaliarUrl}</small></p>
-                        </div>
-                        <div class='footer'>
-                            <p>Este é um e-mail automático, por favor não responda.</p>
-                            <p>&copy; " . date('Y') . " ZoomX. Todos os direitos reservados.</p>
-                        </div>
-                    </div>
+                  <p>Olá,</p>
+                  <p>Sua viagem com código <strong>{$via_codigo}</strong> foi finalizada com sucesso.</p>
+                  <p>Por favor, <a href='{$avaliarUrl}'>clique aqui para avaliar a viagem</a>.</p>
+                  <p>Obrigado por usar ZoomX!</p>
                 </body>
                 </html>
             ";
 
-            $headers = [
-                'From: ZoomX <no-reply@zoomx.com.br>',
-                'Reply-To: suporte@zoomx.com.br',
-                'MIME-Version: 1.0',
-                'Content-type: text/html; charset=UTF-8',
-                'X-Mailer: PHP/' . phpversion(),
-                'X-Priority: 1 (Highest)',
-                'X-MSMail-Priority: High',
-                'Importance: High'
-            ];
-            
-            $headers = implode("\r\n", $headers);
+            $headers = "From: no-reply@zoomx.com.br\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
 
-            $emailEnviado = mail($emailUsuario, $assunto, $mensagem, $headers);
-            
-            if (!$emailEnviado) {
-                throw new Exception('Falha ao enviar e-mail de confirmação.');
-            }
+            mail($emailUsuario, $assunto, $mensagem, $headers);
 
-            $conexao->commit();
-            
-            $_SESSION['mensagem'] = [
-                'tipo' => 'success',
-                'texto' => 'Viagem finalizada com sucesso e e-mail enviado ao usuário!'
-            ];
-            
-        } catch (PDOException $e) {
-            if ($conexao->inTransaction()) {
-                $conexao->rollBack();
-            }
-            
-            $_SESSION['mensagem'] = [
-                'tipo' => 'error',
-                'texto' => 'Erro no banco de dados ao finalizar viagem: ' . $e->getMessage()
-            ];
-            
-        } catch (Exception $e) {
-            if ($conexao->inTransaction()) {
-                $conexao->rollBack();
-            }
-            
-            $_SESSION['mensagem'] = [
-                'tipo' => 'warning',
-                'texto' => $e->getMessage()
-            ];
+            $_SESSION['mensagem'] = 'Viagem finalizada com sucesso e email enviado ao usuário!';
+        } else {
+            $_SESSION['mensagem'] = 'Funcionário ou usuário não encontrado para esta viagem.';
         }
-
-        header('Location: ../admin/index.php');
-        exit;
+    } catch (PDOException $e) {
+        $_SESSION['mensagem'] = 'Erro ao finalizar viagem: ' . $e->getMessage();
     }
 
+    header('Location: ../admin/index.php');
+    exit;
+}
 
 
 if (!in_array($acao, ['aceitar', 'recusar']) || $id_solicitacao <= 0) {
