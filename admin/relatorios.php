@@ -92,14 +92,16 @@ $stmtMototaxistasAtivos->execute();
 $mototaxistasAtivos = $stmtMototaxistasAtivos->fetchAll(PDO::FETCH_ASSOC);
 
 $sqlReceita = "SELECT 
-               DATE_FORMAT(via_data, '%Y-%m') as mes,
-               SUM(via_valor) as total,
-               COUNT(*) as total_corridas
-               FROM viagens
-               WHERE via_status = 'finalizada'
-               AND via_data BETWEEN DATE_FORMAT(NOW() - INTERVAL 12 MONTH, '%Y-%m-01') AND LAST_DAY(NOW())
-               GROUP BY DATE_FORMAT(via_data, '%Y-%m')
-               ORDER BY mes ASC";
+    TO_CHAR(via_data, 'YYYY-MM') AS mes,
+    SUM(via_valor) AS total,
+    COUNT(*) AS total_corridas
+FROM viagens
+WHERE via_status = 'finalizada'
+  AND via_data BETWEEN (DATE_TRUNC('month', NOW()) - INTERVAL '12 months') 
+                   AND (DATE_TRUNC('month', NOW()) + INTERVAL '1 month' - INTERVAL '1 day')
+GROUP BY TO_CHAR(via_data, 'YYYY-MM')
+ORDER BY mes ASC";
+
 $stmtReceita = $conexao->prepare($sqlReceita);
 $stmtReceita->execute();
 $receitaMensal = $stmtReceita->fetchAll(PDO::FETCH_ASSOC);
