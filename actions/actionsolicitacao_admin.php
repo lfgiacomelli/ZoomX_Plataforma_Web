@@ -14,30 +14,61 @@ $status = $_POST['status'] ?? ($acao === 'aceitar' ? 'aceita' : 'recusada');
 $funcionario_codigo = $_POST['funcionario_codigo'] ?? null;
 $ate_codigo = $_SESSION['fun_codigo'] ?? null;  
 
+
 if ($acao === 'finalizar' && $via_codigo > 0) {
     try {
-        $sqlBuscarFuncionario = "SELECT fun_codigo FROM viagens WHERE via_codigo = :via_codigo LIMIT 1";
-        $stmt = $conexao->prepare($sqlBuscarFuncionario);
+        // Buscar código do funcionário e código do usuário (usu_codigo) da viagem
+        $sqlBuscarDados = "
+            SELECT v.fun_codigo, v.usu_codigo, u.usu_email
+            FROM viagens v
+            INNER JOIN usuarios u ON v.usu_codigo = u.usu_codigo
+            WHERE v.via_codigo = :via_codigo
+            LIMIT 1";
+        $stmt = $conexao->prepare($sqlBuscarDados);
         $stmt->bindParam(':via_codigo', $via_codigo, PDO::PARAM_INT);
         $stmt->execute();
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($resultado && isset($resultado['fun_codigo'])) {
+        if ($resultado && isset($resultado['fun_codigo'], $resultado['usu_email'])) {
             $funcionario_codigo = $resultado['fun_codigo'];
+            $emailUsuario = $resultado['usu_email'];
 
-            $sqlAtivar = 'UPDATE funcionarios SET fun_ativo = true WHERE fun_codigo = :funcionario_codigo';
+            $sqlAtivar = "UPDATE funcionarios SET fun_ativo = true WHERE fun_codigo = :funcionario_codigo";
             $stmt = $conexao->prepare($sqlAtivar);
             $stmt->bindParam(':funcionario_codigo', $funcionario_codigo, PDO::PARAM_INT);
             $stmt->execute();
 
-            $sql = "UPDATE viagens SET via_status = 'finalizada' WHERE via_codigo = :via_codigo";
-            $stmt = $conexao->prepare($sql);
+            $sqlAtualizarViagem = "UPDATE viagens SET via_status = 'finalizada' WHERE via_codigo = :via_codigo";
+            $stmt = $conexao->prepare($sqlAtualizarViagem);
             $stmt->bindParam(':via_codigo', $via_codigo, PDO::PARAM_INT);
             $stmt->execute();
 
-            $_SESSION['mensagem'] = 'Viagem finalizada com sucesso!';
+            $avaliarUrl = "https://zoomx.onrender.com/user/avaliar_viagem.php?via_codigo=" . urlencode($via_codigo);
+
+            $assunto = "Viagem Finalizada - ZoomX";
+            $mensagem = "
+                <html>
+                <head>
+                  <title>Viagem Finalizada</title>
+                </head>
+                <body>
+                  <p>Olá,</p>
+                  <p>Sua viagem com código <strong>{$via_codigo}</strong> foi finalizada com sucesso.</p>
+                  <p>Por favor, <a href='{$avaliarUrl}'>clique aqui para avaliar a viagem</a>.</p>
+                  <p>Obrigado por usar ZoomX!</p>
+                </body>
+                </html>
+            ";
+
+            $headers = "From: no-reply@zoomx.com.br\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+
+            mail($emailUsuario, $assunto, $mensagem, $headers);
+
+            $_SESSION['mensagem'] = 'Viagem finalizada com sucesso e email enviado ao usuário!';
         } else {
-            $_SESSION['mensagem'] = 'Funcionário não encontrado para esta viagem.';
+            $_SESSION['mensagem'] = 'Funcionário ou usuário não encontrado para esta viagem.';
         }
     } catch (PDOException $e) {
         $_SESSION['mensagem'] = 'Erro ao finalizar viagem: ' . $e->getMessage();
