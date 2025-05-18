@@ -113,8 +113,16 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
+    max-width: 400px; /* largura padrão */
+    width: 90%; /* para adaptar um pouco no desktop */
 }
-
+@media (max-width: 480px) {
+    .notification-popup {
+        max-width: none;
+        width: 95vw; /* quase toda a largura da viewport no celular */
+        padding: 15px 20px; /* pode ajustar o padding para caber melhor */
+    }
+}
 .notification-popup.show {
     opacity: 1;
     visibility: visible;
@@ -142,7 +150,6 @@ body {
     font-weight: bold;
     font-size: 1.1rem;
 }
-
 .map-container {
     height: 300px;
     margin-top: 25px;
