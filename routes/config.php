@@ -1,3 +1,3 @@
 <?php
-define('BASE_URL', 'http://localhost/tcc/');
+define('BASE_URL', 'https://zoomx.onrender.com/');
 ?>
