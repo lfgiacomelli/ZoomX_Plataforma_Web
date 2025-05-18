@@ -1,4 +1,5 @@
 <?php
+session_start();
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
@@ -58,7 +59,12 @@ if ($acao == 'adicionar') {
     }
 }
 
-if ($acao == 'editar' && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario' || $_SESSION['tipo'] == 'atendente') {
+if (
+    $acao === 'editar' &&
+    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
+    $_SESSION['logado099'] === true &&
+    $_SESSION['tipo'] === 'usuario'
+) {
     if (!empty($senha)) {
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);  // Cria o hash da senha
         $sql = "UPDATE usuarios SET usu_nome = :nome, usu_email = :email, usu_senha = :senha, usu_telefone = :telefone, usu_ativo = :ativo, usu_updated_at = :updated_at WHERE usu_codigo = :id";
@@ -88,7 +94,12 @@ if ($acao == 'editar' && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario
     }
 }
 
-if ($acao == 'admin_editar'  && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario' || $_SESSION['tipo'] == 'atendente') {
+if (
+    $acao === 'admin_editar' &&
+    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
+    $_SESSION['logado099'] === true &&
+    ($_SESSION['tipo'] === 'atendente')
+) {
     if (!empty($senha)) {
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);
         $sql = "UPDATE usuarios SET usu_nome = :nome, usu_email = :email, usu_senha = :senha, usu_telefone = :telefone, usu_ativo = :ativo WHERE usu_codigo = :id";
@@ -118,7 +129,12 @@ if ($acao == 'admin_editar'  && $_SESSION['logado099'] || $_SESSION['tipo'] == '
 }
 
 
-if ($acao == 'excluir'  && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuario' || $_SESSION['tipo'] == 'atendente') {
+if (
+    $acao === 'excluir' &&
+    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
+    $_SESSION['logado099'] === true &&
+    ($_SESSION['tipo'] === 'usuario' || $_SESSION['tipo'] === 'atendente')
+) {
     $sql = 'DELETE FROM avaliacoes WHERE via_codigo IN (
                 SELECT via_codigo FROM viagens WHERE usu_codigo = :id
             )';
@@ -168,7 +184,12 @@ if ($acao == 'excluir'  && $_SESSION['logado099'] || $_SESSION['tipo'] == 'usuar
     }
 }
 
-if ($acao == 'banir'  && $_SESSION['logado099'] &&  $_SESSION['tipo'] == 'atendente') {
+if (
+    $acao === 'banir' &&
+    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
+    $_SESSION['logado099'] === true &&
+    $_SESSION['tipo'] === 'atendente'
+) {
     $sql = "UPDATE usuarios SET usu_ativo = false WHERE usu_codigo = :id";
     $stmt = $conexao->prepare($sql);
     $stmt->bindParam(':id', $id);
@@ -183,7 +204,12 @@ if ($acao == 'banir'  && $_SESSION['logado099'] &&  $_SESSION['tipo'] == 'atende
         exit;
     }
 }
-if ($acao == 'desbanir') {
+if (
+    $acao === 'desbanir' &&
+    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
+    $_SESSION['logado099'] === true &&
+    $_SESSION['tipo'] === 'atendente'
+) {
     $sql = "UPDATE usuarios SET usu_ativo = true WHERE usu_codigo = :id";
     $stmt = $conexao->prepare($sql);
     $stmt->bindParam(':id', $id);
