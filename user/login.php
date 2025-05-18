@@ -1,5 +1,7 @@
 <?php
+ini_set('session.save_path', '/tmp');
 session_start();
+
 require '../bd/conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
