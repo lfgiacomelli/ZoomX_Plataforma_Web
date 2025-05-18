@@ -2,7 +2,9 @@
 session_start();
 
 if (
-    empty($_SESSION['ativo']) || ($_SESSION['tipo'] ?? '') !== 'usuario' 
+    !isset($_SESSION['logado099']) ||
+    !isset($_SESSION['ativo']) || $_SESSION['ativo'] !== true ||
+    !isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'usuario'
 ) {
     header('Location: ../user/login.php');
     exit;

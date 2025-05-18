@@ -1,5 +1,16 @@
 <?php
 session_start();
+
+if (
+    !isset($_SESSION['logado099']) ||
+    !isset($_SESSION['ativo']) || $_SESSION['ativo'] !== true ||
+    !isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'usuario'
+) {
+    header('Location: ../user/login.php');
+    exit;
+}
+
+
 if (!isset($_SESSION['hora_abertura_' . $_GET['id']])) {
     $_SESSION['hora_abertura_' . $_GET['id']] = time();
 }
@@ -12,9 +23,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: index.php?error=missing_id");
     exit;
 }
-if (!isset($_SESSION['logado099']) && $_SESSION['tipo'] != 'usuario') {
-    exit;
-}
+
 
 $id_solicitacao = intval($_GET['id']);
 

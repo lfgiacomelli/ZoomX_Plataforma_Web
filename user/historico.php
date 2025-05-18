@@ -1,9 +1,15 @@
 <?php
 session_start();
-if (!isset($_SESSION['logado099'])  && $_SESSION['ativo'] != true && $_SESSION['tipo'] !== 'usuario') {
+
+if (
+    !isset($_SESSION['logado099']) ||
+    !isset($_SESSION['ativo']) || $_SESSION['ativo'] !== true ||
+    !isset($_SESSION['tipo']) || $_SESSION['tipo'] !== 'usuario'
+) {
     header('Location: ../user/login.php');
     exit;
 }
+
 
 $usuario_id = filter_var($_SESSION['id'], FILTER_VALIDATE_INT);
 
