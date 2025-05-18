@@ -67,7 +67,6 @@ $grupos = array_chunk($anuncios, 4);
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero-section">
         <div class="container">
             <h1 class="display-3 fw-bold mb-4">Seu transporte rápido e seguro</h1>
@@ -79,7 +78,6 @@ $grupos = array_chunk($anuncios, 4);
         </div>
     </section>
 
-    <!-- Features -->
     <section class="py-5">
         <div class="container">
             <div class="row text-center">
@@ -231,7 +229,6 @@ $grupos = array_chunk($anuncios, 4);
         </div>
     </section>
 
-    <!-- CTA -->
     <section class="py-5 bg-dark text-white">
         <div class="container text-center py-4">
             <h2 class="display-6 fw-bold mb-4">Pronto para experimentar?</h2>

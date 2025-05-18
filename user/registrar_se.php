@@ -2,7 +2,7 @@
 session_start();
 
 $erro_email = isset($_SESSION['erro_email']) ? $_SESSION['erro_email'] : '';
-unset($_SESSION['erro_email']); // Limpar a mensagem após exibir
+unset($_SESSION['erro_email']); 
 ?>
 
 <!DOCTYPE html>
@@ -12,11 +12,8 @@ unset($_SESSION['erro_email']); // Limpar a mensagem após exibir
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZoomX - Registrar</title>
-    <!-- Google Fonts - Righteous -->
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SweetAlert2 para pop-ups bonitos -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../css/registrar_se.css">
 </head>

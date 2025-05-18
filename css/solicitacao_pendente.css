@@ -113,14 +113,14 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    max-width: 400px; /* largura padrão */
-    width: 90%; /* para adaptar um pouco no desktop */
+    max-width: 400px; 
+    width: 90%; 
 }
 @media (max-width: 480px) {
     .notification-popup {
         max-width: none;
-        width: 95vw; /* quase toda a largura da viewport no celular */
-        padding: 15px 20px; /* pode ajustar o padding para caber melhor */
+        width: 95vw;
+        padding: 15px 20px;
     }
 }
 .notification-popup.show {

@@ -27,13 +27,11 @@ body {
     line-height: 1.6;
 }
 
-/* Layout Base */
 .container {
     max-width: 1200px;
     padding: 0 20px;
 }
 
-/* Header Minimalista */
 .navbar {
     background-color: var(--secondary);
     padding: 15px 0;
@@ -72,12 +70,10 @@ body {
     transform: translateY(-2px);
 }
 
-/* Conteúdo Principal */
 .main-content {
     padding: 40px 0;
 }
 
-/* Hero Section */
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
     color: var(--secondary);
@@ -130,7 +126,6 @@ body {
     background-color: #ffca28;
 }
 
-/* Ações Principais */
 .actions-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -209,7 +204,6 @@ body {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Seção de Anúncios */
 .section-title {
     text-align: center;
     font-size: 2.2rem;
@@ -295,7 +289,6 @@ body {
     transform: translateX(3px);
 }
 
-/* Seção de Destaques */
 .features {
     background-color: var(--secondary);
     padding: 80px 0;
@@ -330,7 +323,6 @@ body {
     color: #666;
 }
 
-/* Footer Melhorado */
 .footer {
     background: var(--primary);
     color: var(--secondary);
@@ -425,7 +417,6 @@ body {
     animation-delay: 0.6s;
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .hero {
         padding: 80px 0;

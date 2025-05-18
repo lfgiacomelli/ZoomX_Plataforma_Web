@@ -1,6 +1,4 @@
 <?php
-// Iniciar a sessão com tratamento de erros
-
 session_start();
 if (!isset($_SESSION['logado099'])  && $_SESSION['ativo'] != true && $_SESSION['tipo'] !== 'usuario') {
     header('Location: ../user/login.php');

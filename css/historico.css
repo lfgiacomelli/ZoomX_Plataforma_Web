@@ -31,7 +31,6 @@ body {
     padding: 2rem 1.5rem;
 }
 
-/* Header Styles */
 .page-header {
     text-align: center;
     margin-bottom: 3rem;
@@ -66,7 +65,6 @@ body {
     margin: 0 auto;
 }
 
-/* Cards Grid */
 .trips-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -80,7 +78,7 @@ body {
     }
 }
 
-/* Trip Card */
+ Trip Card */
 .trip-card {
     background: var(--light);
     border-radius: var(--border-radius);
@@ -161,7 +159,6 @@ body {
     font-size: 0.85rem;
 }
 
-/* Empty State */
 .empty-state {
     grid-column: 1 / -1;
     text-align: center;
@@ -189,7 +186,6 @@ body {
     margin: 0 auto;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 576px) {
     .container {
         padding: 1.5rem 1rem;
@@ -216,7 +212,7 @@ body {
     }
 }
 
-/* Animations */
+
 @keyframes fadeIn {
     from {
         opacity: 0;

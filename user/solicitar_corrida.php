@@ -6,7 +6,7 @@ if (!isset($_SESSION['logado099'])  && $_SESSION['ativo'] != true && $_SESSION['
     exit;
 }
 
-$chavePix = '12345678900'; // Substitua pela chave Pix real
+$chavePix = '12345678900';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -29,7 +29,6 @@ $chavePix = '12345678900'; // Substitua pela chave Pix real
         </div>
     </div>
 
-    <!-- Error Message -->
     <div class="error-message" id="errorMessage"></div>
 
     <div class="app-container">
