@@ -8,10 +8,13 @@ if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["ti
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
-
-
 $dataInicio = isset($_GET['data_inicio']) ? $_GET['data_inicio'] : date('Y-m-d', strtotime('-30 days'));
 $dataFim = isset($_GET['data_fim']) ? $_GET['data_fim'] : date('Y-m-d');
+
+if (!DateTime::createFromFormat('Y-m-d', $dataInicio) || !DateTime::createFromFormat('Y-m-d', $dataFim)) {
+    $dataInicio = date('Y-m-d', strtotime('-30 days'));
+    $dataFim = date('Y-m-d');
+}
 
 if ($dataInicio > $dataFim) {
     $temp = $dataInicio;
@@ -41,7 +44,6 @@ $sqlCorridas = "SELECT
 FROM viagens
 WHERE via_data BETWEEN :dataInicio AND :dataFim";
 
-
 $stmtCorridas = $conexao->prepare($sqlCorridas);
 $stmtCorridas->bindParam(':dataInicio', $dataInicio);
 $stmtCorridas->bindParam(':dataFim', $dataFim);
@@ -60,9 +62,11 @@ $dadosCanceladas = $stmtCanceladas->fetch(PDO::FETCH_ASSOC);
 
 $dadosCorridas['canceladas'] = $dadosCanceladas['canceladas'];
 
-
-$valorMedio = $dadosCorridas['valor_medio'] ? number_format($dadosCorridas['valor_medio'], 2, ',', '.') : '0,00';
-$faturamentoTotal = $dadosCorridas['faturamento_total'] ? number_format($dadosCorridas['faturamento_total'], 2, ',', '.') : '0,00';
+$valorMedio = isset($dadosCorridas['valor_medio']) && $dadosCorridas['total'] > 0 ? 
+    number_format($dadosCorridas['valor_medio'], 2, ',', '.') : '0,00';
+    
+$faturamentoTotal = isset($dadosCorridas['faturamento_total']) ? 
+    number_format($dadosCorridas['faturamento_total'], 2, ',', '.') : '0,00';
 
 $sqlUsuariosAtivos = "SELECT u.usu_nome, COUNT(v.via_codigo) as total_corridas, SUM(v.via_valor) as total_gasto
                      FROM usuarios u
@@ -109,11 +113,11 @@ $stmtReceita->execute();
 $receitaMensal = $stmtReceita->fetchAll(PDO::FETCH_ASSOC);
 
 $sqlStatusCorridas = "SELECT 
-                      via_status, 
-                      COUNT(*) as total
-                      FROM viagens
-                      WHERE via_data BETWEEN :dataInicio AND :dataFim
-                      GROUP BY via_status";
+    via_status, 
+    COUNT(*) as total
+FROM viagens
+WHERE via_data BETWEEN :dataInicio AND :dataFim
+GROUP BY via_status";
 $stmtStatus = $conexao->prepare($sqlStatusCorridas);
 $stmtStatus->bindParam(':dataInicio', $dataInicio);
 $stmtStatus->bindParam(':dataFim', $dataFim);
@@ -166,16 +170,34 @@ foreach ($receitaMensal as $item) {
 
 $labelsStatus = [];
 $valoresStatus = [];
-$coresStatus = [
-    'finalizada' => 'rgba(40, 167, 69, 0.8)',
-    'recusada' => 'rgba(220, 53, 69, 0.8)',
-    'em andamento' => 'rgba(255, 193, 7, 0.8)',
-    'pendente' => 'rgba(108, 117, 125, 0.8)'
+$todosStatus = [
+    'finalizada' => ['label' => 'Finalizadas', 'color' => 'rgba(40, 167, 69, 0.8)'],
+    'cancelada' => ['label' => 'Canceladas', 'color' => 'rgba(220, 53, 69, 0.8)'],
+    'em andamento' => ['label' => 'Em Andamento', 'color' => 'rgba(255, 193, 7, 0.8)'],
+    'pendente' => ['label' => 'Pendentes', 'color' => 'rgba(108, 117, 125, 0.8)'],
+    'aguardando' => ['label' => 'Aguardando', 'color' => 'rgba(23, 162, 184, 0.8)']
 ];
+$labelsStatus = [];
+$valoresStatus = [];
+$coresStatus = [];
 
-foreach ($statusCorridas as $item) {
-    $labelsStatus[] = ucfirst($item['via_status']);
-    $valoresStatus[] = (int)$item['total'];
+foreach ($todosStatus as $status => $info) {
+    $encontrado = false;
+    foreach ($statusCorridas as $item) {
+        if (strtolower($item['via_status']) === $status) {
+            $labelsStatus[] = $info['label'];
+            $valoresStatus[] = (int)$item['total'];
+            $coresStatus[] = $info['color'];
+            $encontrado = true;
+            break;
+        }
+    }
+    
+    if (!$encontrado) {
+        $labelsStatus[] = $info['label'];
+        $valoresStatus[] = 0;
+        $coresStatus[] = $info['color'];
+    }
 }
 
 $horariosFormatados = [];
@@ -420,7 +442,7 @@ foreach ($horariosPico as $horario) {
                     <div class="stat-label">Total de Corridas</div>
                     <div class="progress mt-2">
                         <div class="progress-bar bg-success" style="width: <?= ($dadosCorridas['total'] > 0) ? round(($dadosCorridas['finalizadas'] / $dadosCorridas['total']) * 100) : 0 ?>%"></div>
-                        <div class="progress-bar bg-danger" style="width: <?= ($dadosCorridas['total'] > 0) ? round(($dadosCorridas['recusadas'] / $dadosCorridas['total']) * 100) : 0 ?>%"></div>
+                        <div class="progress-bar bg-danger" style="width: <?= ($dadosCorridas['total'] > 0) ? round(($dadosCorridas['canceladas'] / $dadosCorridas['total']) * 100) : 0 ?>%"></div>
                         <div class="progress-bar bg-warning" style="width: <?= ($dadosCorridas['total'] > 0) ? round(($dadosCorridas['em_andamento'] / $dadosCorridas['total']) * 100) : 0 ?>%"></div>
                     </div>
                     <div class="row mt-2">
@@ -716,54 +738,51 @@ foreach ($horariosPico as $horario) {
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
 
     <script>
-        const ctxStatus = document.getElementById('graficoStatus').getContext('2d');
-        const graficoStatus = new Chart(ctxStatus, {
-            type: 'doughnut',
-            data: {
-                labels: <?= json_encode($labelsStatus) ?>,
-                datasets: [{
-                    label: 'Status das Corridas',
-                    data: <?= json_encode($valoresStatus) ?>,
-                    backgroundColor: [
-                        <?= implode(',', array_map(function ($status) use ($coresStatus) {
-                            return "'" . ($coresStatus[$status] ?? 'rgba(108, 117, 125, 0.8)') . "'";
-                        }, array_map('strtolower', $labelsStatus))) ?>
-                    ],
-                    borderWidth: 2,
-                    hoverBorderWidth: 3,
-                    hoverOffset: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                cutout: '60%',
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#000',
+            const ctxStatus = document.getElementById('graficoStatus').getContext('2d');
+            const graficoStatus = new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: <?= json_encode($labelsStatus) ?>,
+                    datasets: [{
+                        label: 'Status das Corridas',
+                        data: <?= json_encode($valoresStatus) ?>,
+                        backgroundColor: <?= json_encode($coresStatus) ?>,
+                        borderWidth: 2,
+                        hoverBorderWidth: 3,
+                        hoverOffset: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '60%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#000',
+                                font: {
+                                    family: 'Righteous',
+                                    size: 14
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            formatter: (value, ctx) => {
+                                const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                if (total === 0) return '0%';
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${percentage}%`;
+                            },
                             font: {
-                                family: 'Righteous',
-                                size: 14
+                                weight: 'bold',
+                                size: 16
                             }
                         }
-                    },
-                    datalabels: {
-                        color: '#fff',
-                        formatter: (value, ctx) => {
-                            const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${percentage}%`;
-                        },
-                        font: {
-                            weight: 'bold',
-                            size: 16
-                        }
                     }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
+                },
+                plugins: [ChartDataLabels]
+            });
 
         Chart.register(window['chartjs-plugin-annotation']); 
 
