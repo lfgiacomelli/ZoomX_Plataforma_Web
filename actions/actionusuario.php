@@ -128,61 +128,75 @@ if (
     }
 }
 
-
 if (
     $acao === 'excluir' &&
     isset($_SESSION['logado099'], $_SESSION['tipo']) &&
     $_SESSION['logado099'] === true &&
     ($_SESSION['tipo'] === 'usuario' || $_SESSION['tipo'] === 'atendente')
 ) {
-    $sql = 'DELETE FROM avaliacoes WHERE via_codigo IN (
-                SELECT via_codigo FROM viagens WHERE usu_codigo = :id
-            )';
-    $stmt = $conexao->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+    $id = $_SESSION['usu_codigo']; // ID do usuário a ser excluído
 
-    $sql = 'DELETE FROM viagens WHERE usu_codigo = :id';
-    $stmt = $conexao->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+    try {
+        // Executa os deletes normalmente...
+        $sql = 'DELETE FROM avaliacoes WHERE via_codigo IN (
+                    SELECT via_codigo FROM viagens WHERE usu_codigo = :id
+                )';
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    $sql = 'DELETE FROM avaliacoes WHERE usu_codigo = :id';
-    $stmt = $conexao->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+        $sql = 'DELETE FROM viagens WHERE usu_codigo = :id';
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    $sql = 'DELETE FROM solicitacoes WHERE usu_codigo = :id';
-    $stmt = $conexao->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+        $sql = 'DELETE FROM avaliacoes WHERE usu_codigo = :id';
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    $sql = "DELETE FROM usuarios WHERE usu_codigo = :id";
-    $stmt = $conexao->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $retorno = $stmt->execute();
+        $sql = 'DELETE FROM solicitacoes WHERE usu_codigo = :id';
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    $_SESSION = array();
+        $sql = "DELETE FROM usuarios WHERE usu_codigo = :id";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $retorno = $stmt->execute();
 
-    session_destroy();
+        if ($retorno) {
+            if ($_SESSION['tipo'] === 'usuario') {
+                $_SESSION = array();
+                session_destroy();
 
-
-    if ($retorno) {
-        if ($_SESSION['tipo'] == 'atendente') {
-            $_SESSION['mensagem'] = 'Conta excluída com sucesso!';
-            header('Location: ../admin/usuarios/usuarios.php');
-            exit;
+                header('Location: ../index.php');
+                exit;
+            } elseif ($_SESSION['tipo'] === 'atendente') {
+                $_SESSION['mensagem'] = 'Conta excluída com sucesso!';
+                header('Location: ../admin/usuarios/usuarios.php');
+                exit;
+            }
         } else {
-            $_SESSION['mensagem'] = 'Conta excluída com sucesso!';
-            header('Location: ../index.php');
+            $_SESSION['mensagem'] = 'Erro ao excluir conta!';
+            if ($_SESSION['tipo'] === 'atendente') {
+                header('Location: ../admin/usuarios/usuarios.php');
+            } else {
+                header('Location: ../index.php');
+            }
             exit;
         }
-    } else {
-        echo "<div class='alert alert-danger' role='alert'>Erro ao excluir conta!</div>";
-        header('Location: ../admin/usuarios/usuarios.php');
+    } catch (PDOException $e) {
+        $_SESSION['mensagem'] = 'Erro no banco de dados: ' . $e->getMessage();
+        if ($_SESSION['tipo'] === 'atendente') {
+            header('Location: ../admin/usuarios/usuarios.php');
+        } else {
+            header('Location: ../index.php');
+        }
         exit;
     }
 }
+
 
 if (
     $acao === 'banir' &&
