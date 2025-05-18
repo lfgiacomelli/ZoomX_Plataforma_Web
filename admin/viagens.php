@@ -1,12 +1,13 @@
 <?php
+
 session_start();
-require '../bd/conexao.php';
-if (!isset($_SESSION["logado099"]) && $_SESSION["tipo"] !== 'atendente') {
+
+if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
     header("Location: ../index.php");
     exit;
 }
 
-
+require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
 $sql = 'SELECT v.via_codigo, v.via_data, v.via_valor, v.via_formapagamento, 

@@ -1,12 +1,14 @@
 <?php
 session_start();
-if (!isset($_SESSION["logado099"]) || $_SESSION["tipo"] !== 'atendente') {
+
+if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
     header("Location: ../index.php");
     exit;
 }
 require '../bd/conexao.php';
-
 $conexao = conexao::getInstance();
+
+
 
 $dataInicio = isset($_GET['data_inicio']) ? $_GET['data_inicio'] : date('Y-m-d', strtotime('-30 days'));
 $dataFim = isset($_GET['data_fim']) ? $_GET['data_fim'] : date('Y-m-d');

@@ -1,12 +1,12 @@
 <?php
-require '../bd/conexao.php';
-$conexao = conexao::getInstance();
-
 session_start();
-if (!isset($_SESSION["logado099"]) && $_SESSION["tipo"] !== 'atendente') {
+
+if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
     header("Location: ../index.php");
     exit;
 }
+require '../bd/conexao.php';
+$conexao = conexao::getInstance();
 
 $sql = 'SELECT * FROM funcionarios WHERE fun_codigo = :id';
 $stmt = $conexao->prepare($sql);
@@ -19,7 +19,6 @@ if (!$funcionario) {
     exit;
 }
 
-// Busca últimas viagens do funcionário
 $sqlViagens = "SELECT v.via_codigo, v.via_data, v.via_valor, v.via_status, 
                       u.usu_nome as cliente, v.via_origem, v.via_destino
                FROM viagens v
@@ -28,7 +27,7 @@ $sqlViagens = "SELECT v.via_codigo, v.via_data, v.via_valor, v.via_status,
                ORDER BY v.via_data DESC
                LIMIT 5";
 $stmtViagens = $conexao->prepare($sqlViagens);
-$stmtViagens->bindParam(':id', $_SESSION["id"]);
+$stmtViagens->bindParam(':id', $_SESSION["fun_codigo"]);
 $stmtViagens->execute();
 $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
 ?>

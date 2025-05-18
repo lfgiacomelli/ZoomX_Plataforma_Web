@@ -1,8 +1,10 @@
 <?php
 require '../../bd/conexao.php';
 $conexao = conexao::getInstance();
+
 session_start();
-if (!isset($_SESSION["logado099"]) && $_SESSION["tipo"] !== 'atendente') {
+
+if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
     header("Location: ../index.php");
     exit;
 }

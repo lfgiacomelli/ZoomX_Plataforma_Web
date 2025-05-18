@@ -1,13 +1,14 @@
 <?php
+
 session_start();
-if (!isset($_SESSION["logado099"]) && $_SESSION["tipo"] !== 'atendente') {
+
+if (!isset($_SESSION["logado099"]) || !isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== 'atendente') {
     header("Location: ../index.php");
     exit;
 }
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
-// Consulta otimizada para solicitações pendentes
 $sql = "SELECT s.sol_codigo, s.sol_origem, s.sol_destino, s.sol_valor, s.sol_servico, s.sol_formapagamento,
                s.sol_data, u.usu_nome, u.usu_codigo, u.usu_telefone
         FROM solicitacoes s 
