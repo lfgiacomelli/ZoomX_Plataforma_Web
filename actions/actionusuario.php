@@ -69,7 +69,7 @@ if (
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);  // Cria o hash da senha
         $sql = "UPDATE usuarios SET usu_nome = :nome, usu_email = :email, usu_senha = :senha, usu_telefone = :telefone, usu_ativo = :ativo, usu_updated_at = :updated_at WHERE usu_codigo = :id";
         $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(':senha', $hashedPassword);  // Inserir o hash da senha
+        $stmt->bindParam(':senha', $hashedPassword); 
     } else {
         $sql = "UPDATE usuarios SET usu_nome = :nome, usu_email = :email, usu_telefone = :telefone, usu_ativo = :ativo, usu_updated_at = :updated_at WHERE usu_codigo = :id";
         $stmt = $conexao->prepare($sql);
@@ -134,10 +134,7 @@ if (
     $_SESSION['logado099'] === true &&
     ($_SESSION['tipo'] === 'usuario' || $_SESSION['tipo'] === 'atendente')
 ) {
-    $id = $_SESSION['usu_codigo']; // ID do usuário a ser excluído
-
     try {
-        // Executa os deletes normalmente...
         $sql = 'DELETE FROM avaliacoes WHERE via_codigo IN (
                     SELECT via_codigo FROM viagens WHERE usu_codigo = :id
                 )';
