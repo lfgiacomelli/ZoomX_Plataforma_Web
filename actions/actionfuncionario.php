@@ -105,12 +105,13 @@ if ($acao == 'excluir') {
 
 if ($acao == 'ativar_desativar') {
     $codigo = $_POST['fun_codigo'];
-    $ativo = $_POST['ativo'];
+    $ativo = ($_POST['ativo'] === '1');
+
 
     $sql = "UPDATE funcionarios SET fun_ativo = :ativo WHERE fun_codigo = :codigo";
     $stmt = $conexao->prepare($sql);
-    $stmt->bindParam(':ativo', $ativo, PDO::PARAM_INT);
-    $stmt->bindParam(':codigo', $codigo, PDO::PARAM_INT);
+    $stmt->bindValue(':ativo', $ativo, PDO::PARAM_BOOL); 
+    $stmt->bindValue(':codigo', $codigo, PDO::PARAM_INT);
     $retorno = $stmt->execute();
 
     if ($retorno) {
