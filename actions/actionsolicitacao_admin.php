@@ -28,9 +28,8 @@ if ($acao === 'finalizar' && $via_codigo > 0) {
         $stmt->execute();
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($resultado && isset($resultado['fun_codigo'], $resultado['usu_email'])) {
+        if ($resultado && isset($resultado['fun_codigo'])) {
             $funcionario_codigo = $resultado['fun_codigo'];
-            $emailUsuario = $resultado['usu_email'];
 
             $sqlAtivar = "UPDATE funcionarios SET fun_ativo = true WHERE fun_codigo = :funcionario_codigo";
             $stmt = $conexao->prepare($sqlAtivar);
@@ -42,30 +41,8 @@ if ($acao === 'finalizar' && $via_codigo > 0) {
             $stmt->bindParam(':via_codigo', $via_codigo, PDO::PARAM_INT);
             $stmt->execute();
 
-            $avaliarUrl = "https://zoomx.onrender.com/user/avaliar_viagem.php?via_codigo=" . urlencode($via_codigo);
 
-            $assunto = "Viagem Finalizada - ZoomX";
-            $mensagem = "
-                <html>
-                <head>
-                  <title>Viagem Finalizada</title>
-                </head>
-                <body>
-                  <p>Olá,</p>
-                  <p>Sua viagem com código <strong>{$via_codigo}</strong> foi finalizada com sucesso.</p>
-                  <p>Por favor, <a href='{$avaliarUrl}'>clique aqui para avaliar a viagem</a>.</p>
-                  <p>Obrigado por usar ZoomX!</p>
-                </body>
-                </html>
-            ";
-
-            $headers = "From: no-reply@zoomx.com.br\r\n";
-            $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-
-            mail($emailUsuario, $assunto, $mensagem, $headers);
-
-            $_SESSION['mensagem'] = 'Viagem finalizada com sucesso e email enviado ao usuário!';
+            $_SESSION['mensagem'] = 'Viagem finalizada com sucesso!';
         } else {
             $_SESSION['mensagem'] = 'Funcionário ou usuário não encontrado para esta viagem.';
         }
@@ -76,6 +53,7 @@ if ($acao === 'finalizar' && $via_codigo > 0) {
     header('Location: ../admin/index.php');
     exit;
 }
+
 
 
 if (!in_array($acao, ['aceitar', 'recusar']) || $id_solicitacao <= 0) {
