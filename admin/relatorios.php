@@ -77,32 +77,41 @@ $stmtUsuariosAtivos->bindParam(':dataFim', $dataFim);
 $stmtUsuariosAtivos->execute();
 $usuariosAtivos = $stmtUsuariosAtivos->fetchAll(PDO::FETCH_ASSOC);
 
-$sqlMototaxistasAtivos = "SELECT f.fun_nome, COUNT(v.via_codigo) as total_corridas, 
-                         SUM(v.via_valor) as total_faturado, AVG(a.ava_nota) as media_avaliacao
-                         FROM funcionarios f
-                         LEFT JOIN viagens v ON f.fun_codigo = v.fun_codigo
-                         LEFT JOIN avaliacoes a ON v.via_codigo = a.via_codigo
-                         WHERE v.via_data BETWEEN :dataInicio AND :dataFim
-                         AND f.fun_cargo = 'mototaxista'
-                         GROUP BY f.fun_codigo
-                         ORDER BY total_corridas DESC
-                         LIMIT 5";
+$sqlMototaxistasAtivos = "
+    SELECT 
+        f.fun_nome, 
+        COUNT(v.via_codigo) AS total_corridas, 
+        SUM(v.via_valor) AS total_faturado, 
+        AVG(a.ava_nota) AS media_avaliacao
+    FROM funcionarios f
+    LEFT JOIN viagens v ON f.fun_codigo = v.fun_codigo
+    LEFT JOIN avaliacoes a ON v.via_codigo = a.via_codigo
+    WHERE v.via_data BETWEEN :dataInicio AND :dataFim
+      AND f.fun_cargo = 'mototaxista'
+    GROUP BY f.fun_nome, f.fun_codigo
+    ORDER BY total_corridas DESC
+    LIMIT 5
+";
+
 $stmtMototaxistasAtivos = $conexao->prepare($sqlMototaxistasAtivos);
 $stmtMototaxistasAtivos->bindParam(':dataInicio', $dataInicio);
 $stmtMototaxistasAtivos->bindParam(':dataFim', $dataFim);
 $stmtMototaxistasAtivos->execute();
 $mototaxistasAtivos = $stmtMototaxistasAtivos->fetchAll(PDO::FETCH_ASSOC);
 
-$sqlReceita = "SELECT 
-    TO_CHAR(via_data, 'YYYY-MM') AS mes,
-    SUM(via_valor) AS total,
-    COUNT(*) AS total_corridas
-FROM viagens
-WHERE via_status = 'finalizada'
-  AND via_data BETWEEN (DATE_TRUNC('month', NOW()) - INTERVAL '12 months') 
-                   AND (DATE_TRUNC('month', NOW()) + INTERVAL '1 month' - INTERVAL '1 day')
-GROUP BY TO_CHAR(via_data, 'YYYY-MM')
-ORDER BY mes ASC";
+$sqlReceita = "
+    SELECT 
+        TO_CHAR(via_data, 'YYYY-MM') AS mes,
+        SUM(via_valor) AS total,
+        COUNT(*) AS total_corridas
+    FROM viagens
+    WHERE via_status = 'finalizada'
+      AND via_data >= DATE_TRUNC('month', NOW()) - INTERVAL '12 months'
+      AND via_data < DATE_TRUNC('month', NOW()) + INTERVAL '1 month'
+    GROUP BY TO_CHAR(via_data, 'YYYY-MM')
+    ORDER BY mes ASC
+";
+
 
 $stmtReceita = $conexao->prepare($sqlReceita);
 $stmtReceita->execute();
@@ -122,14 +131,15 @@ $statusCorridas = $stmtStatus->fetchAll(PDO::FETCH_ASSOC);
 
 $sqlHorariosPico = "
     SELECT 
-        EXTRACT(HOUR FROM via_data) as hora,
-        COUNT(*) as total_corridas
+        EXTRACT(HOUR FROM via_data) AS hora,
+        COUNT(*) AS total_corridas
     FROM viagens
     WHERE via_data BETWEEN :dataInicio AND :dataFim
     GROUP BY EXTRACT(HOUR FROM via_data)
     ORDER BY total_corridas DESC
     LIMIT 5
 ";
+
 
 $stmtHorariosPico = $conexao->prepare($sqlHorariosPico);
 $stmtHorariosPico->bindParam(':dataInicio', $dataInicio);
