@@ -1,7 +1,6 @@
 <?php
 include '../../components/verifica_sessao_admin.php';
 
-
 require '../../bd/conexao.php';
 $conexao = conexao::getInstance();
 

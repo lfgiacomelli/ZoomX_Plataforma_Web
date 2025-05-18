@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/tcc/bd/conexao.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/bd/conexao.php';
 $conexao = conexao::getInstance();
 
 $sql = "SELECT * FROM anuncios ORDER BY anu_codigo DESC";
