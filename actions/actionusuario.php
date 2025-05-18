@@ -1,5 +1,5 @@
 <?php
-session_start();
+include '../components/verifica_sessao.php';
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
