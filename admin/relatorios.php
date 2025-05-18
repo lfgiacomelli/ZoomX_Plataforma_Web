@@ -118,29 +118,35 @@ $stmtStatus->bindParam(':dataFim', $dataFim);
 $stmtStatus->execute();
 $statusCorridas = $stmtStatus->fetchAll(PDO::FETCH_ASSOC);
 
-$sqlHorariosPico = "SELECT 
-                    HOUR(via_data) as hora,
-                    COUNT(*) as total_corridas
-                    FROM viagens
-                    WHERE via_data BETWEEN :dataInicio AND :dataFim
-                    GROUP BY HOUR(via_data)
-                    ORDER BY total_corridas DESC
-                    LIMIT 5";
+$sqlHorariosPico = "
+    SELECT 
+        EXTRACT(HOUR FROM via_data) as hora,
+        COUNT(*) as total_corridas
+    FROM viagens
+    WHERE via_data BETWEEN :dataInicio AND :dataFim
+    GROUP BY EXTRACT(HOUR FROM via_data)
+    ORDER BY total_corridas DESC
+    LIMIT 5
+";
+
 $stmtHorariosPico = $conexao->prepare($sqlHorariosPico);
 $stmtHorariosPico->bindParam(':dataInicio', $dataInicio);
 $stmtHorariosPico->bindParam(':dataFim', $dataFim);
 $stmtHorariosPico->execute();
 $horariosPico = $stmtHorariosPico->fetchAll(PDO::FETCH_ASSOC);
 
-$sqlRotasPopulares = "SELECT 
-                      CONCAT(via_origem, ' → ', via_destino) as rota,
-                      COUNT(*) as total_viagens,
-                      AVG(via_valor) as valor_medio
-                      FROM viagens
-                      WHERE via_data BETWEEN :dataInicio AND :dataFim
-                      GROUP BY via_origem, via_destino
-                      ORDER BY total_viagens DESC
-                      LIMIT 5";
+$sqlRotasPopulares = "
+    SELECT 
+        via_origem || ' → ' || via_destino as rota,
+        COUNT(*) as total_viagens,
+        AVG(via_valor) as valor_medio
+    FROM viagens
+    WHERE via_data BETWEEN :dataInicio AND :dataFim
+    GROUP BY via_origem, via_destino
+    ORDER BY total_viagens DESC
+    LIMIT 5
+";
+
 $stmtRotasPopulares = $conexao->prepare($sqlRotasPopulares);
 $stmtRotasPopulares->bindParam(':dataInicio', $dataInicio);
 $stmtRotasPopulares->bindParam(':dataFim', $dataFim);
