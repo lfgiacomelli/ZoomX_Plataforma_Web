@@ -110,10 +110,17 @@ if ($acao === 'aceitar') {
         $solicitacao = $stmt_solicitacao->fetch(PDO::FETCH_ASSOC);
 
         if ($solicitacao) {
-            $sql = 'UPDATE funcionarios set fun_ativo = true WHERE fun_codigo = :funcionario_codigo';
-            $stmt = $conexao->prepare($sql);
-            $stmt->bindParam(':funcionario_codigo', $funcionario_codigo);
-            $stmt->execute();
+        $sql = 'UPDATE funcionarios SET fun_ativo = false WHERE fun_codigo = :funcionario_codigo';
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':funcionario_codigo', $funcionario_codigo, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 0) {
+            $_SESSION['mensagem'] = 'Funcionário não encontrado ou já está ativo.';
+        } else {
+            $_SESSION['mensagem'] = 'Funcionário ativado com sucesso.';
+        }
+
             $sql_viagem = "INSERT INTO viagens (
                 fun_codigo, sol_codigo, usu_codigo, ate_codigo, via_origem, via_destino, 
                 via_valor, via_formapagamento, via_data, via_servico, via_status, via_observacoes
