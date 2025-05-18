@@ -1,6 +1,9 @@
 <?php
 session_start();
-if ( $_SESSION['ativo'] != true && $_SESSION['tipo'] !== 'usuario') {
+
+if (
+    empty($_SESSION['ativo']) || ($_SESSION['tipo'] ?? '') !== 'usuario' 
+) {
     header('Location: ../user/login.php');
     exit;
 }
