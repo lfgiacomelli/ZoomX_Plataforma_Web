@@ -42,7 +42,8 @@ unset($_SESSION['erro_email']); // Limpar a mensagem após exibir
             <div class="form-group">
                 <label for="senha">Senha</label>
                 <div class="password-container">
-                    <input type="password" name="senha" id="senha" class="form-control" required placeholder="Crie uma senha">
+                    <input type="password" name="senha" id="senha" placeholder="Insira sua Senha" autocomplete="new-password" required>
+
                     <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                 </div>
             </div>
