@@ -32,12 +32,13 @@ $dadosUsuarios = $stmtUsuarios->fetch(PDO::FETCH_ASSOC);
 
 $sqlCorridas = "SELECT 
     COUNT(*) as total,
-    SUM(CASE WHEN via_status = 'finalizada' THEN true ELSE false END) as finalizadas,
-    SUM(CASE WHEN via_status = 'em andamento' THEN true ELSE false END) as em_andamento,
+    SUM(CASE WHEN via_status = 'finalizada' THEN 1 ELSE 0 END) as finalizadas,
+    SUM(CASE WHEN via_status = 'em andamento' THEN 1 ELSE 0 END) as em_andamento,
     AVG(via_valor) as valor_medio,
     SUM(via_valor) as faturamento_total
 FROM viagens
 WHERE via_data BETWEEN :dataInicio AND :dataFim";
+
 
 $stmtCorridas = $conexao->prepare($sqlCorridas);
 $stmtCorridas->bindParam(':dataInicio', $dataInicio);
