@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["fun_codigo"] = $funcionario["fun_codigo"];
                 $_SESSION["nome"] = $funcionario["fun_nome"];
 
-                header("Location: relatorios.php");
+                header("Location: index.php");
                 exit;
             }
         }
