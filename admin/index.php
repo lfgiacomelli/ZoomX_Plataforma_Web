@@ -124,7 +124,7 @@ $avaliacoes = $conexao->query($sql)->fetch(PDO::FETCH_ASSOC);
                     <div class="stat-value"><?= $viagensAndamentoCount ?></div>
                     <a href="#viagens-andamento" class="btn btn-sm btn-outline-dark">Ver</a>
                     <form method="post" action="../actions/actionsolicitacao_admin.php">
-                        <input type="hidden" name="acao" value="finalizar_tudo">
+                        <input type="hidden" name="acao" value="finalizar_todas">
                         <button type="submit" class="btn btn-sm btn-outlike-dark">
                             Finalizar todas
                         </button>
