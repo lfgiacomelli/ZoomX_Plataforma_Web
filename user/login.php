@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (password_verify($senha, $usuario["usu_senha"])) {
                 $_SESSION["logado099"] = true;
                 $_SESSION['tipo'] = 'usuario';
-                $_SESSION['ativo'] = $usuario['usu_ativo'];
+                $_SESSION['ativo'] = true;
                 $_SESSION["id"] = $usuario["usu_codigo"];
                 $_SESSION["nome"] = $usuario["usu_nome"];
 
