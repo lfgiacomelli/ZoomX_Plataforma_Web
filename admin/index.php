@@ -104,7 +104,7 @@ $avaliacoes = $conexao->query($sql)->fetch(PDO::FETCH_ASSOC);
             <div class="col-md-2 col-4">
                 <div class="card card-custom stat-card">
                     <i class="bi bi-bicycle card-icon"></i>
-                    <h5 class="card-title">Mototaxistas</h5>
+                    <h5 class="card-title">Mototaxistas Ativos</h5>
                     <div class="stat-value"><?= $totalMototaxistas ?></div>
                     <a href="funcionarios/funcionarios.php" class="btn btn-sm btn-outline-dark">Gerenciar</a>
                 </div>
@@ -123,6 +123,12 @@ $avaliacoes = $conexao->query($sql)->fetch(PDO::FETCH_ASSOC);
                     <h5 class="card-title">Em Andamento</h5>
                     <div class="stat-value"><?= $viagensAndamentoCount ?></div>
                     <a href="#viagens-andamento" class="btn btn-sm btn-outline-dark">Ver</a>
+                    <form method="post" action="../actions/actionsolicitacao_admin">
+                        <input type="hidden" name="acao" value="finalizar_tudo">
+                        <button type="submit">
+                            Finalizar todas
+                        </button>
+                    </form>
                 </div>
             </div>
             <div class="col-md-2 col-4">

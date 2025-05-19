@@ -50,6 +50,35 @@ if ($acao === 'finalizar' && $via_codigo > 0) {
     header('Location: ../admin/index.php');
     exit;
 }
+if ($acao === 'finalizar_todas') {
+    try {
+        $conexao->beginTransaction();
+
+        $sql = "UPDATE viagens SET via_status = 'finalizada' WHERE via_status != 'finalizada'";
+        $stmt = $conexao->prepare($sql);
+        $stmt->execute();
+
+        $sqlFun = "SELECT DISTINCT fun_codigo FROM viagens WHERE via_status = 'finalizada' AND fun_codigo IS NOT NULL";
+        $stmtFun = $conexao->prepare($sqlFun);
+        $stmtFun->execute();
+        $funcoes = $stmtFun->fetchAll(PDO::FETCH_COLUMN);
+
+        if (!empty($funcoes)) {
+            $placeholders = implode(',', array_fill(0, count($funcoes), '?'));
+            $sqlAtivar = "UPDATE funcionarios SET fun_ativo = TRUE WHERE fun_codigo IN ($placeholders)";
+            $stmtAtivar = $conexao->prepare($sqlAtivar);
+            $stmtAtivar->execute($funcoes);
+        }
+
+        $conexao->commit();
+
+        $_SESSION['mensagem'] = 'Todas as viagens foram finalizadas e os funcionários ativados.';
+    } catch (Exception $e) {
+        $conexao->rollBack();
+        $_SESSION['mensagem'] = 'Erro ao finalizar viagens: ' . $e->getMessage();
+    }
+}
+
 
 
 
