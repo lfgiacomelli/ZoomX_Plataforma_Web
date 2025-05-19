@@ -77,6 +77,9 @@ if ($acao === 'finalizar_todas') {
         $conexao->rollBack();
         $_SESSION['mensagem'] = 'Erro ao finalizar viagens: ' . $e->getMessage();
     }
+
+    header('Location: ../admin/index.php');
+    exit; 
 }
 
 
