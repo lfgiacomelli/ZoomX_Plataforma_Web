@@ -101,10 +101,6 @@ $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
             height: 100%;
         }
 
-        .card-custom:hover {
-            transform: translateY(-5px);
-        }
-
         .card-header-custom {
             background-color: var(--primary-color);
             color: white;
