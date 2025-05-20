@@ -247,7 +247,7 @@ $status_class = strtolower($solicitacao['sol_status']) === 'aceita' ? 'status-ac
 
         function playNotificationSound() {
             try {
-                const audio = new Audio('../assets/notificacao.mp3');
+                const audio = new Audio('../assets/solicitacao_nova.mp3');
                 audio.play().catch(e => console.log('Autoplay prevented:', e));
             } catch (e) {
                 console.log('Error playing sound:', e);
