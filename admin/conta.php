@@ -34,7 +34,13 @@ $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Mototaxista | <?= htmlspecialchars($funcionario['fun_nome']) ?></title>
+    <title>Painel do
+        <?php if($funcionario['fun_cargo'] === 'mototaxista'):?>    
+            Mototaxista 
+        <?php else :?>
+            Atendente
+        <?php endif; ?>
+    |   <?= htmlspecialchars($funcionario['fun_nome']) ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
