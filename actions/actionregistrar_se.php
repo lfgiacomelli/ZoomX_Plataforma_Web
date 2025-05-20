@@ -1,5 +1,8 @@
 <?php
 
+require '../bd/conexao.php';
+$conexao = conexao::getInstance();
+
 $acao = isset($_POST['acao']) ? $_POST['acao'] : null;
 $id = isset($_POST['id']) ? $_POST['id'] : 0;
 $nome = isset($_POST['nome']) ? $_POST['nome'] : null;
