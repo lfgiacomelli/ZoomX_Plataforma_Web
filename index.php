@@ -149,38 +149,40 @@ $grupos = array_chunk($anuncios, 4);
             </div>
         </div>
     </section>
-    <section class="carrossel_anuncios">
-        <h2 class="text-center mb-4">Parceiros do ZOOMX</h2>
-        <div id="carouselAnuncios" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-            <div class="carousel-inner">
+    <?php if($anuncios > 1) :?>
+        <section class="carrossel_anuncios">
+            <h2 class="text-center mb-4">Parceiros do ZOOMX</h2>
+            <div id="carouselAnuncios" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner">
 
-                <?php foreach ($grupos as $index => $grupo): ?>
-                    <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                        <div class="row g-3">
-                            <?php foreach ($grupo as $anuncio): ?>
-                                <div class="col-md-3">
-                                    <div class="card card-custom shadow-sm">
-                                        <?php if (!empty($anuncio['anu_foto'])): ?>
-                                            <img src="<?= htmlspecialchars($anuncio['anu_foto']) ?>" alt="Anúncio" class="card-img-top">
-                                        <?php else: ?>
-                                            <img src="https://via.placeholder.com/300x200?text=Sem+Imagem" alt="Sem Imagem" class="card-img-top">
-                                        <?php endif; ?>
+                    <?php foreach ($grupos as $index => $grupo): ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <div class="row g-3">
+                                <?php foreach ($grupo as $anuncio): ?>
+                                    <div class="col-md-3">
+                                        <div class="card card-custom shadow-sm">
+                                            <?php if (!empty($anuncio['anu_foto'])): ?>
+                                                <img src="<?= htmlspecialchars($anuncio['anu_foto']) ?>" alt="Anúncio" class="card-img-top">
+                                            <?php else: ?>
+                                                <img src="https://via.placeholder.com/300x200?text=Sem+Imagem" alt="Sem Imagem" class="card-img-top">
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-                                </div>
-                            <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
 
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselAnuncios" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </div>
-    </section>
+        </section>
+    <?php endif; ?>
     <section class="testimonials bg-light">
         <div class="container">
             <div class="text-center mb-5">
