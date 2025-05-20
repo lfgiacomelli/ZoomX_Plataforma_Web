@@ -290,7 +290,7 @@ $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
                             <span><?= htmlspecialchars($funcionario['fun_telefone']) ?></span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label"><i class="bi bi-calendar"></i> Cadastro</span>
+                            <span class="info-label"><i class="bi bi-calendar"></i> Contratado em:</span>
                             <span><?= date('d/m/Y', strtotime($funcionario['fun_data_contratacao'])) ?></span>
                         </div>
                         <div class="text-end mt-3">
@@ -381,7 +381,7 @@ $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-3 mb-4">
                 <div class="card card-custom text-center">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-check-circle"></i> Concluídas</h5>
+                        <h5 class="card-title"><i class="bi bi-check-circle"></i> Concluídas por você:</h5>
                         <h3 class="card-text">
                             <?= $conexao->query("SELECT COUNT(*) FROM viagens WHERE ate_codigo = {$_SESSION['fun_codigo']} AND via_status = 'finalizada'")->fetchColumn() ?>
                         </h3>
@@ -401,7 +401,7 @@ $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-3 mb-4">
                 <div class="card card-custom text-center">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-currency-dollar"></i> Ganhos Hoje</h5>
+                        <h5 class="card-title"><i class="bi bi-currency-dollar"></i> Faturamento de Hoje:</h5>
                         <h3 class="card-text">
                             R$ <?= number_format($conexao->query("SELECT SUM(via_valor) FROM viagens WHERE ate_codigo = {$_SESSION['fun_codigo']} AND via_data::date = CURRENT_DATE") ->fetchColumn() ?? 0, 2, ',', '.') ?>
 
@@ -412,7 +412,7 @@ $viagens = $stmtViagens->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-3 mb-4">
                 <div class="card card-custom text-center">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="bi bi-graph-up"></i> Total Ganhos</h5>
+                        <h5 class="card-title"><i class="bi bi-graph-up"></i> Faturamento Total:</h5>
                         <h3 class="card-text">
                             R$ <?= number_format($conexao->query("SELECT SUM(via_valor) FROM viagens WHERE ate_codigo = {$_SESSION['fun_codigo']}")->fetchColumn() ?? 0, 2, ',', '.') ?>
                         </h3>
