@@ -166,7 +166,7 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                             <i class="bi bi-slash-circle"></i>
                                                         </a>
                                                     <?php else: ?>
-                                                        <form action="../../actions/actionusuario.php" method="post">
+                                                        <form action="../../actions/actionusuario_admin.php" method="post">
                                                             <input type="hidden" name="acao" value="desbanir">
                                                             <input type="hidden" name="id" value="<?php echo $usuario['usu_codigo']; ?>">
                                                             <button type="submit" class="btn btn-sm btn-outline-success" title="Desbanir">

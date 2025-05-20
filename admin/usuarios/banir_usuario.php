@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </ul>
                         </div>
                         
-                        <form method="POST" action="../../actions/actionusuario.php">
+                        <form method="POST" action="../../actions/actionusuario_admin.php">
                             <input type="hidden" name="acao" value="banir">
                             <input type="hidden" name="id" value="<?php echo $usuario['usu_codigo']; ?>">
                             <div class="d-flex justify-content-between">
@@ -151,7 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

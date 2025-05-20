@@ -28,7 +28,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 </head>
 <body>
     <h1>deseja excluir <?= $usuario['usu_nome'] ?></h1>
-    <form action="../../actions/actionusuario.php" method="post">
+    <form action="../../actions/actionusuario_admin.php" method="post">
         <input type="hidden" name="id" value="<?= $usuario['usu_codigo'] ?>">
         <input type="hidden" name="acao" value="excluir">
         <button type="submit">Excluir</button>

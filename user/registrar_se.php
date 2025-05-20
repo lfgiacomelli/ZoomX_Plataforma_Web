@@ -25,7 +25,7 @@ unset($_SESSION['erro_email']);
             <p>Crie sua conta gratuita</p>
         </div>
 
-        <form class="register-form" action="../actions/actionusuario.php" method="POST">
+        <form class="register-form" action="../actions/actionregistrar_se.php" method="POST">
             <div class="form-group">
                 <label for="nome">Nome Completo</label>
                 <input type="text" name="nome" id="nome" class="form-control" required placeholder="Digite seu nome" value="<?php echo isset($_SESSION['form_data']['nome']) ? htmlspecialchars($_SESSION['form_data']['nome']) : ''; ?>">
