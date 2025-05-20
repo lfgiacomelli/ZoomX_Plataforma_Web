@@ -1,4 +1,10 @@
 <?php
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../user/registrar_se.php');
+    exit;
+}
 
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
