@@ -14,10 +14,7 @@ $updated_at = date('Y-m-d H:i:s');
 $created_at = date('Y-m-d H:i:s');
 
 if (
-    $acao === 'editar' &&
-    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
-    $_SESSION['logado099'] === true &&
-    $_SESSION['tipo'] === 'usuario'
+    $acao === 'editar'
 ) {
     if (!empty($senha)) {
         $hashedPassword = password_hash($senha, PASSWORD_DEFAULT);
@@ -49,12 +46,7 @@ if (
 }
 
 
-if (
-    $acao === 'excluir' &&
-    isset($_SESSION['logado099'], $_SESSION['tipo']) &&
-    $_SESSION['logado099'] === true &&
-    ($_SESSION['tipo'] === 'usuario' || $_SESSION['tipo'] === 'atendente')
-) {
+if ($acao === 'excluir') {
     try {
         $sql = 'DELETE FROM avaliacoes WHERE via_codigo IN (
                     SELECT via_codigo FROM viagens WHERE usu_codigo = :id
