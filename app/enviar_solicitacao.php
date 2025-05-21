@@ -1,15 +1,8 @@
 <?php
-// Inicia a sessão e verifica se o usuário está logado
-// session_start();
-// if (!isset($_SESSION['logado099']) || $_SESSION['ativo'] != 1 || $_SESSION['tipo'] !== 'usuario') {
-//     echo json_encode(['status' => 'erro', 'mensagem' => 'Usuário não autenticado']);
-//     exit;
-// }
 
 require '../bd/conexao.php';
 $conexao = conexao::getInstance();
 
-// Recebe os dados do corpo da requisição JSON
 $data = json_decode(file_get_contents('php://input'), true);
 
 $usuario_id = isset($data['usu_codigo']) ? $data['usu_codigo'] : 0;
