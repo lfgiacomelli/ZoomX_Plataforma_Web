@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-require_once 'conexao.php';
+require_once '../bd/conexao.php';
 
 $conexao = conexao::getInstance();
 $data = json_decode(file_get_contents("php://input"));
