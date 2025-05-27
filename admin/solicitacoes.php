@@ -9,7 +9,7 @@ $sql = "SELECT s.sol_codigo, s.sol_origem, s.sol_destino, s.sol_valor, s.sol_ser
                s.sol_data, u.usu_nome, u.usu_codigo, u.usu_telefone
         FROM solicitacoes s 
         INNER JOIN usuarios u ON u.usu_codigo = s.usu_codigo
-        WHERE s.sol_status = 'pendente' 
+        WHERE s.sol_status = 'Pendente' 
         ORDER BY s.sol_data DESC";
 $stmt = $conexao->prepare($sql);
 $stmt->execute();
