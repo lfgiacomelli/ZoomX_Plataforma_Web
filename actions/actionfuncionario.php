@@ -47,10 +47,10 @@ if ($acao == 'editar') {
     if (!empty($senha)) {
         $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
         $sql = "UPDATE funcionarios SET fun_nome = :nome, fun_email = :email, fun_senha = :senha, fun_telefone = :telefone, 
-                fun_cnh = :cnh, fun_data_contratacao = :data_contratacao, fun_ativo = :ativo, fun_cargo = :cargo WHERE fun_codigo = :id";
+                fun_cnh = :cnh, fun_ativo = :ativo, fun_cargo = :cargo WHERE fun_codigo = :id";
     } else {
         $sql = "UPDATE funcionarios SET fun_nome = :nome, fun_email = :email, fun_telefone = :telefone, 
-                fun_cnh = :cnh, fun_data_contratacao = :data_contratacao, fun_ativo = :ativo, fun_cargo = :cargo WHERE fun_codigo = :id";
+                fun_cnh = :cnh, fun_ativo = :ativo, fun_cargo = :cargo WHERE fun_codigo = :id";
     }
     
     $stmt = $conexao->prepare($sql);
@@ -61,7 +61,6 @@ if ($acao == 'editar') {
     }
     $stmt->bindParam(':telefone', $telefone);
     $stmt->bindParam(':cnh', $cnh);
-    $stmt->bindParam(':data_contratacao', $data_contratacao);
     $stmt->bindParam(':ativo', $ativo);
     $stmt->bindParam(':cargo', $cargo);
     $stmt->bindParam(':id', $id);
