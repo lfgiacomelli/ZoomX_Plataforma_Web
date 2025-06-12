@@ -15,7 +15,7 @@ $sqlSolicitacoes = "SELECT s.sol_codigo, s.sol_origem, s.sol_destino, s.sol_data
 $solicitacoes = $conexao->query($sqlSolicitacoes)->fetchAll(PDO::FETCH_ASSOC);
 
 $sqlViagens = "SELECT v.via_codigo, v.via_data, v.via_valor, 
-                      u.usu_nome, f.fun_nome as mototaxista
+                      u.usu_nome, f.fun_nome as Mototaxista
                FROM viagens v
                INNER JOIN usuarios u ON v.usu_codigo = u.usu_codigo
                INNER JOIN funcionarios f ON v.fun_codigo = f.fun_codigo
@@ -24,7 +24,7 @@ $sqlViagens = "SELECT v.via_codigo, v.via_data, v.via_valor,
 $viagens = $conexao->query($sqlViagens)->fetchAll(PDO::FETCH_ASSOC);
 
 $sqlViagensAndamento = "SELECT v.via_codigo, v.via_data, v.via_origem, v.via_destino, v.sol_codigo,
-                               u.usu_nome as cliente, f.fun_nome as mototaxista
+                               u.usu_nome as cliente, f.fun_nome as Mototaxista
                         FROM viagens v
                         INNER JOIN usuarios u ON v.usu_codigo = u.usu_codigo
                         INNER JOIN funcionarios f ON v.fun_codigo = f.fun_codigo
@@ -33,7 +33,7 @@ $sqlViagensAndamento = "SELECT v.via_codigo, v.via_data, v.via_origem, v.via_des
 $viagensAndamento = $conexao->query($sqlViagensAndamento)->fetchAll(PDO::FETCH_ASSOC);
 
 $totalUsuarios = $conexao->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
-$totalMototaxistas = $conexao->query("SELECT COUNT(*) FROM funcionarios WHERE fun_ativo = true and fun_cargo = 'mototaxista'")->fetchColumn();
+$totalMototaxistas = $conexao->query("SELECT COUNT(*) FROM funcionarios WHERE fun_ativo = true and fun_cargo = 'Mototaxista'")->fetchColumn();
 $faturamentoHoje = $conexao->query("SELECT SUM(via_valor) FROM viagens WHERE via_data::date = CURRENT_DATE")->fetchColumn() ?? 0;
 $viagensAndamentoCount = count($viagensAndamento);
 
