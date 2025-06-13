@@ -18,7 +18,7 @@ $solicitacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $sql = "SELECT f.fun_codigo, f.fun_nome, f.fun_telefone, m.mot_codigo, m.mot_modelo
         FROM funcionarios f
         LEFT JOIN motocicletas m ON f.fun_codigo = m.fun_codigo
-        WHERE f.fun_ativo = true AND f.fun_cargo = 'mototaxista'
+        WHERE f.fun_ativo = true AND f.fun_cargo = 'Mototaxista'
         ORDER BY f.fun_nome";
 $mototaxistas = $conexao->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
