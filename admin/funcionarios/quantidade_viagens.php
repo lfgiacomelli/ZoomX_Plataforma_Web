@@ -388,15 +388,19 @@ $viagens = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h3>Faturamento Total</h3>
                 <p>
                     <?php
-                    $sqlFaturamento = ($funcionario['fun_cargo'] == 'Atendente')
-                        ? "SELECT SUM(via_valor) as faturamento FROM viagens WHERE ate_codigo = :id AND via_status = 'finalizada'"
-                        : "SELECT SUM(via_valor) as faturamento FROM viagens WHERE fun_codigo = :id AND via_status = 'finalizada'";
+                    $sqlFaturamento = ($funcionario['fun_cargo'] === 'Atendente')
+                        ? "SELECT COALESCE(SUM(via_valor), 0) AS faturamento FROM viagens WHERE ate_codigo = :id AND via_status = 'finalizada'"
+                        : "SELECT COALESCE(SUM(via_valor), 0) AS faturamento FROM viagens WHERE fun_codigo = :id AND via_status = 'finalizada'";
+                
                     $stmt = $conexao->prepare($sqlFaturamento);
                     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
                     $stmt->execute();
+                
                     $faturamento = $stmt->fetch(PDO::FETCH_ASSOC);
-                    echo "R$ " . number_format($faturamento['faturamento'], 2, ',', '.');
+                    $valorFaturamento = is_numeric($faturamento['faturamento']) ? (float)$faturamento['faturamento'] : 0;
+                    echo "R$ " . number_format($valorFaturamento, 2, ',', '.');
                     ?>
+
                 </p>
             </div>
             <div class="summary-item">
