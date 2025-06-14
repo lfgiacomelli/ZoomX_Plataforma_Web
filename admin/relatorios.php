@@ -83,7 +83,7 @@ $sqlMototaxistasAtivos = "
     LEFT JOIN viagens v ON f.fun_codigo = v.fun_codigo
     LEFT JOIN avaliacoes a ON v.via_codigo = a.via_codigo
     WHERE v.via_data BETWEEN :dataInicio AND :dataFim
-      AND f.fun_cargo = 'mototaxista'
+      AND f.fun_cargo = 'Mototaxista'
     GROUP BY f.fun_nome, f.fun_codigo
     ORDER BY total_corridas DESC
     LIMIT 5
