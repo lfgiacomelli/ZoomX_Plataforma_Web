@@ -252,9 +252,13 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             const cpf = this.value;
             if (!validarCPF(cpf)) {
                 alert("CPF inválido! Verifique e tente novamente.");
-                this.focus();
+
+                setTimeout(() => {
+                    this.focus();
+                }, 100);
             }
         });
+
         document.getElementById("cpf").addEventListener("blur", function () {
             const cpf = this.value;
             if (!validarCPF(cpf)) {
