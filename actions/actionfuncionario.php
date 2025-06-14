@@ -14,13 +14,14 @@ $cnh = isset($_POST['cnh']) ? $_POST['cnh'] : null;
 $data_contratacao = isset($_POST['data_contratacao']) ? $_POST['data_contratacao'] : null;
 $ativo = isset($_POST['ativo']) ? $_POST['ativo'] : false;
 $cargo = isset($_POST['cargo']) ? $_POST['cargo'] : null;
+$cpf = isset($_POST['cpf']) ? $_POST['cpf'] : null;
 
 
 if ($acao == 'adicionar') {
     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO funcionarios (fun_nome, fun_email, fun_senha, fun_telefone, fun_cnh, fun_data_contratacao, fun_ativo, fun_cargo) 
-            VALUES (:nome, :email, :senha, :telefone, :cnh, :data_contratacao, :ativo, :cargo)";
+    $sql = "INSERT INTO funcionarios (fun_nome, fun_email, fun_senha, fun_telefone, fun_cnh, fun_data_contratacao, fun_ativo, fun_cargo, fun_cpf) 
+            VALUES (:nome, :email, :senha, :telefone, :cnh, :data_contratacao, :ativo, :cargo, cpf)";
     $stmt = $conexao->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':email', $email);
@@ -30,6 +31,7 @@ if ($acao == 'adicionar') {
     $stmt->bindParam(':data_contratacao', $data_contratacao);
     $stmt->bindParam(':ativo', $ativo);
     $stmt->bindParam(':cargo', $cargo);
+    $stmt->bindParam(':cpf', $cpf);
     $retorno = $stmt->execute();
 
     if ($retorno) {
@@ -47,10 +49,10 @@ if ($acao == 'editar') {
     if (!empty($senha)) {
         $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
         $sql = "UPDATE funcionarios SET fun_nome = :nome, fun_email = :email, fun_senha = :senha, fun_telefone = :telefone, 
-                fun_cnh = :cnh, fun_ativo = :ativo, fun_cargo = :cargo WHERE fun_codigo = :id";
+                fun_cnh = :cnh, fun_ativo = :ativo, fun_cargo = :cargo fun_cpf = :cpf WHERE fun_codigo = :id";
     } else {
         $sql = "UPDATE funcionarios SET fun_nome = :nome, fun_email = :email, fun_telefone = :telefone, 
-                fun_cnh = :cnh, fun_ativo = :ativo, fun_cargo = :cargo WHERE fun_codigo = :id";
+                fun_cnh = :cnh, fun_ativo = :ativo, fun_cargo = :cargo, fun_cpf = :cpf WHERE fun_codigo = :id";
     }
     
     $stmt = $conexao->prepare($sql);
@@ -63,6 +65,7 @@ if ($acao == 'editar') {
     $stmt->bindParam(':cnh', $cnh);
     $stmt->bindParam(':ativo', $ativo);
     $stmt->bindParam(':cargo', $cargo);
+    $stmt->bindParam(':cpf', $cpf);
     $stmt->bindParam(':id', $id);
     $retorno = $stmt->execute();
 

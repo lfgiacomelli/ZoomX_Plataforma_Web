@@ -12,7 +12,6 @@ if (!$id) {
     exit;
 }
 
-// Buscar informações do funcionário
 $sqlFuncionario = "SELECT fun_nome, fun_cargo FROM funcionarios WHERE fun_codigo = :id";
 $stmt = $conexao->prepare($sqlFuncionario);
 $stmt->bindParam(':id', $id, PDO::PARAM_INT);

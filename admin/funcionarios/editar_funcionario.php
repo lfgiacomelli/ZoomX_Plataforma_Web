@@ -151,17 +151,24 @@ $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
 
             <div class="form-group">
                 <label for="nome">Nome:</label>
-                <input type="text" name="nome" id="nome" class="form-control" value="<?php echo htmlspecialchars($funcionario['fun_nome']); ?>" required>
+                <input type="text" name="nome" id="nome" class="form-control"
+                    value="<?php echo htmlspecialchars($funcionario['fun_nome']); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
-                <input type="text" name="telefone" id="telefone" class="form-control" value="<?php echo htmlspecialchars($funcionario['fun_telefone']); ?>" maxlength="15" required>
+                <input type="text" name="telefone" id="telefone" class="form-control"
+                    value="<?php echo htmlspecialchars($funcionario['fun_telefone']); ?>" maxlength="15" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" name="email" id="email" class="form-control" value="<?php echo htmlspecialchars($funcionario['fun_email']); ?>" required>
+                <input type="email" name="email" id="email" class="form-control"
+                    value="<?php echo htmlspecialchars($funcionario['fun_email']); ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF do funcionário:</label>
+                <input type="text" name="cpf" id="cpf" value="<?= $funcionario['fun_cpf']; ?>" required>
             </div>
 
             <div class="form-group">
@@ -171,10 +178,11 @@ $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
                     <option value="Mototaxista" <?php echo ($funcionario['fun_cargo'] === 'Mototaxista') ? 'selected' : ''; ?>>Mototáxista</option>
                 </select>
             </div>
-            
+
             <div class="form-group" id="cnh-field" <?php echo ($funcionario['fun_cargo'] === 'Mototaxista') ? '' : 'class="form-group hidden-field"'; ?>>
                 <label for="cnh">CNH:</label>
-                <input type="text" name="cnh" id="cnh" class="form-control" value="<?php echo htmlspecialchars($funcionario['fun_cnh']); ?>" maxlength="11" <?php echo ($funcionario['fun_cargo'] === 'Mototaxista') ? 'required' : ''; ?>>
+                <input type="text" name="cnh" id="cnh" class="form-control"
+                    value="<?php echo htmlspecialchars($funcionario['fun_cnh']); ?>" maxlength="11" <?php echo ($funcionario['fun_cargo'] === 'Mototaxista') ? 'required' : ''; ?>>
             </div>
             <button type="submit" class="btn-submit">Atualizar</button>
         </form>
@@ -205,8 +213,8 @@ $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
                 cnhInput.value = '';
             }
         }
-
         window.onload = toggleCNHField;
+
     </script>
 </body>
 

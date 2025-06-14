@@ -150,7 +150,6 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h1>Registrar Novo Funcionário</h1>
 
     <div class="container">
-        <!-- Formulário de registro -->
         <form action="../../actions/actionfuncionario.php" method="POST">
             <div class="form-group">
                 <label for="nome">Nome Completo:</label>
@@ -170,6 +169,10 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
                 <input type="text" name="telefone" id="telefone" maxlength="15" required />
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF do Funcionário:</label>
+                <input type="text" name="cpf" id="cpf" maxlength="11" required />
             </div>
 
             <div class="form-group">
@@ -192,7 +195,6 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit">Registrar Funcionário</button>
         </form>
 
-        <!-- Carrossel de anúncios -->
         <div class="anuncio" id="anuncio-box">
             <?php foreach ($anuncios as $index => $anuncio): ?>
                 <img src="<?= $anuncio['anu_foto'] ?>" class="<?= $index === 0 ? 'active' : '' ?>" />
@@ -201,7 +203,6 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <script>
-        // Alternar exibição do campo CNH
         function toggleCNHField() {
             const cargo = document.getElementById("cargo").value;
             const cnhField = document.getElementById("cnh-field");
@@ -216,7 +217,6 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         }
 
-        // Formatação de telefone
         document.getElementById("telefone").addEventListener("input", function () {
             let v = this.value.replace(/\D/g, '');
             v = v.replace(/^(\d{2})(\d)/g, '($1) $2');
@@ -224,7 +224,6 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             this.value = v;
         });
 
-        // Carrossel de imagens
         window.onload = () => {
             toggleCNHField();
 
@@ -237,6 +236,12 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 imagens[index].classList.add('active');
             }, 10000);
         };
+        document.getElementById("cpf").addEventListener("input", function () {
+            let v = this.value.replace(/\D/g, '');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2');
+            v = v.replace(/(\d{3})(\d{2})$/, '$1-$2');
+            this.value = v;
+        });
     </script>
 </body>
 </html>
