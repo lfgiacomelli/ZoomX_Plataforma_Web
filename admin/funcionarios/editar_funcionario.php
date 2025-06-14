@@ -168,7 +168,7 @@ $funcionario = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
             <div class="form-group">
                 <label for="cpf">CPF do funcionário:</label>
-                <input type="text" name="cpf" id="cpf" value="<?= $funcionario['fun_cpf']; ?>" required>
+                <input type="text" name="cpf" id="cpf" value="<?= $funcionario['fun_cpf']; ?>" class='form-control' required>
             </div>
 
             <div class="form-group">

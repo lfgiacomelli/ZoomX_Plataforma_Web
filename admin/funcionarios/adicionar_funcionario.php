@@ -172,7 +172,7 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="form-group">
                 <label for="cpf">CPF do Funcionário:</label>
-                <input type="text" name="cpf" id="cpf" maxlength="11" required />
+                <input type="text" name="cpf" id="cpf" maxlength="14" required />
             </div>
 
             <div class="form-group">
