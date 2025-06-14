@@ -12,9 +12,10 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registrar Funcionário</title>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <style>
@@ -144,6 +145,7 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     </style>
 </head>
+
 <body>
     <?php include '../../components/header_admin.php'; ?>
 
@@ -238,10 +240,52 @@ $anuncios = $stmt->fetchAll(PDO::FETCH_ASSOC);
         };
         document.getElementById("cpf").addEventListener("input", function () {
             let v = this.value.replace(/\D/g, '');
-            v = v.replace(/(\d{3})(\d)/, '$1.$2');
-            v = v.replace(/(\d{3})(\d{2})$/, '$1-$2');
+            if (v.length <= 11) {
+                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                v = v.replace(/(\d{3})(\d)/, '$1.$2');
+                v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            }
             this.value = v;
         });
+
+        document.getElementById("cpf").addEventListener("blur", function () {
+            const cpf = this.value;
+            if (!validarCPF(cpf)) {
+                alert("CPF inválido! Verifique e tente novamente.");
+                this.focus();
+            }
+        });
+        document.getElementById("cpf").addEventListener("blur", function () {
+            const cpf = this.value;
+            if (!validarCPF(cpf)) {
+                alert("CPF inválido! Verifique e tente novamente.");
+                this.focus();
+            }
+        });
+
+        function validarCPF(cpf) {
+            cpf = cpf.replace(/[^\d]+/g, '');
+
+            if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+
+            let soma = 0;
+            for (let i = 0; i < 9; i++) {
+                soma += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let resto = 11 - (soma % 11);
+            let digito1 = (resto >= 10) ? 0 : resto;
+
+            soma = 0;
+            for (let i = 0; i < 10; i++) {
+                soma += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            resto = 11 - (soma % 11);
+            let digito2 = (resto >= 10) ? 0 : resto;
+
+            return (parseInt(cpf.charAt(9)) === digito1 && parseInt(cpf.charAt(10)) === digito2);
+        }
+
     </script>
 </body>
+
 </html>
