@@ -1,14 +1,25 @@
 <?php
-define('LOCAL_PATH', getenv('LOCAL_PATH') ?: 'https://https://zoomx.onrender.com/');
+require_once __DIR__ . '/envloader.php';
+loadEnv(__DIR__ . '/.env');
 
-$databaseUrl = getenv('DATABASE_URL') ?: 'postgresql://smithgg415:Jtn5fpob64g18cD9hlsZ6cXHPtoK6jTd@dpg-d0kgkoruibrs739hd8f0-a.oregon-postgres.render.com:5432/zoomx_tcc';
-
+$databaseUrl = getenv('DATABASE_URL');
 $dbparts = parse_url($databaseUrl);
 
+define('LOCAL_PATH', getenv('LOCAL_PATH'));
 define('HOST', $dbparts['host'] ?? 'localhost');
 define('PORT', $dbparts['port'] ?? '5432');
-define('DBNAME', ltrim($dbparts['path'], '/') ?? 'zoomx_tcc');
-define('USER', $dbparts['user'] ?? 'postgres');
-define('PASSWORD', $dbparts['pass'] ?? 'Jtn5fpob64g18cD9hlsZ6cXHPtoK6jTd');
+define('DBNAME', ltrim($dbparts['path'], '/') ?? '');
+define('USER', $dbparts['user'] ?? '');
+define('PASSWORD', $dbparts['pass'] ?? '');
 define('CHARSET', 'utf8');
-?>
+
+// Criar a conexão PDO (exemplo)
+try {
+    $dsn = "pgsql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . ";";
+    $pdo = new PDO($dsn, USER, PASSWORD, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
+} catch (PDOException $e) {
+    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
+}
