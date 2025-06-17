@@ -1,24 +1,13 @@
 <?php
-require_once __DIR__ . '/../envloader.php';
-loadEnv(__DIR__ . '/../.env');
+define('LOCAL_PATH', getenv('LOCAL_PATH') ?: 'https://zoomx.onrender.com/');
 
-$databaseUrl = getenv('DATABASE_URL');
+$databaseUrl = getenv('DATABASE_URL') ?: 'postgresql://giacomelli_devs:NyO6nehZ5tWBFopexVOJrpvCalF0y2ZS@dpg-d18bupggjchc73ep07vg-a.oregon-postgres.render.com:5432/zoomx_tcc_fx7z';
+
 $dbparts = parse_url($databaseUrl);
 
-define('LOCAL_PATH', getenv('LOCAL_PATH'));
 define('HOST', $dbparts['host'] ?? 'localhost');
 define('PORT', $dbparts['port'] ?? '5432');
-define('DBNAME', ltrim($dbparts['path'], '/') ?? '');
-define('USER', $dbparts['user'] ?? '');
-define('PASSWORD', $dbparts['pass'] ?? '');
+define('DBNAME', ltrim($dbparts['path'], '/') ?? 'zoomx_tcc_fx7z');
+define('USER', $dbparts['user'] ?? 'giacomelli_devs');
+define('PASSWORD', $dbparts['pass'] ?? 'NyO6nehZ5tWBFopexVOJrpvCalF0y2ZS');
 define('CHARSET', 'utf8');
-
-try {
-    $dsn = "pgsql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . ";";
-    $pdo = new PDO($dsn, USER, PASSWORD, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-    ]);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
-}
