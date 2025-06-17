@@ -1,6 +1,6 @@
 <?php
-require_once '../envloader.php';
-loadEnv(__DIR__ . '/.env');
+require_once __DIR__ . '/../envloader.php';
+loadEnv(__DIR__ . '/../.env');
 
 $databaseUrl = getenv('DATABASE_URL');
 $dbparts = parse_url($databaseUrl);
@@ -13,7 +13,6 @@ define('USER', $dbparts['user'] ?? '');
 define('PASSWORD', $dbparts['pass'] ?? '');
 define('CHARSET', 'utf8');
 
-// Criar a conexão PDO (exemplo)
 try {
     $dsn = "pgsql:host=" . HOST . ";port=" . PORT . ";dbname=" . DBNAME . ";";
     $pdo = new PDO($dsn, USER, PASSWORD, [
