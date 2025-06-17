@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/envloader.php';
+require_once '../envloader.php';
 loadEnv(__DIR__ . '/.env');
 
 $databaseUrl = getenv('DATABASE_URL');
