@@ -7,7 +7,7 @@ include '../../components/verifica_sessao_admin.php';
 $sql = "SELECT f.fun_codigo, f.fun_nome 
     FROM funcionarios f 
     WHERE f.fun_ativo = true 
-      AND f.fun_cargo = 'mototaxista' 
+      AND f.fun_cargo = 'Mototaxista' 
       AND f.fun_codigo NOT IN (SELECT m.fun_codigo FROM motocicletas m)";
 $stmt = $conexao->prepare($sql);
 $stmt->execute();
